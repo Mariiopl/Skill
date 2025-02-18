@@ -1,6 +1,7 @@
 package com.mpl.backend.service;
 
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,6 +23,10 @@ public class UserService {
 
     public Optional<User> findByUsername(String username) {
         return this.repository.findByUsername(username);
+    }
+
+    public List<User> findAllUsers() {
+        return this.repository.findAll();  // Devuelve todos los usuarios
     }
 
     public User save(UserRegisterDTO userDTO) {

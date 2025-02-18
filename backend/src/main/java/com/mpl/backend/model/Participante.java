@@ -12,7 +12,7 @@ public class Participante {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idParticipante;
+    private Long idParticipante;
 
     private String nombre;
     private String apellidos;
@@ -22,11 +22,11 @@ public class Participante {
     private Especialidad especialidad;
 
     // Getters and Setters
-    public Integer getIdParticipante() {
+    public Long getIdParticipante() {
         return idParticipante;
     }
 
-    public void setIdParticipante(Integer idParticipante) {
+    public void setIdParticipante(Long idParticipante) {
         this.idParticipante = idParticipante;
     }
 
