@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.mpl.backend.service.UserEntityService;
+import com.mpl.backend.service.UserService;
 
 /*
 Permite que Spring Security sepa cómo extraer el usuario de base de datos
@@ -19,16 +19,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     Logger log = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
 
-    private final UserEntityService userService;
+    private final UserService userService;
 
-    public UserDetailsServiceImpl(UserEntityService userService) {
+    public UserDetailsServiceImpl(UserService userService) {
         this.userService = userService;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.debug("loadUserByUsername {}", username);
-        return this.userService.findByUsername(username).orElseThrow(
+        return (UserDetails) this.userService.findByUsername(username).orElseThrow(
                 () -> new UsernameNotFoundException(username + " no encontrado")
         );
     }

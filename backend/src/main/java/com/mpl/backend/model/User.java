@@ -88,5 +88,13 @@ public class User {
     public void setEspecialidad(Especialidad especialidad) {
         this.especialidad = especialidad;
     }
+    //Constructor para registrarse con Username, password, dni y role por defecto
+    public User(String username, String password, String dni) {
+        this.username = username;
+        this.password = password;
+        this.dni = dni;
+        this.role = "USER";
+    }
+    
 }
 

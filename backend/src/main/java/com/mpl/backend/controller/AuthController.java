@@ -11,15 +11,15 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mpl.backend.dto.LoginRequest;
 import com.mpl.backend.dto.LoginResponse;
 import com.mpl.backend.dto.UserRegisterDTO;
-import com.mpl.backend.model.UserEntity;
+import com.mpl.backend.model.User;
 import com.mpl.backend.security.JwtTokenProvider;
-import com.mpl.backend.service.UserEntityService;
+import com.mpl.backend.service.UserService;
 
 @RestController
 public class AuthController {
 
     @Autowired
-    private UserEntityService userService;
+    private UserService userService;
     @Autowired
     private AuthenticationManager authManager;
     @Autowired
@@ -28,7 +28,7 @@ public class AuthController {
 
 
     @PostMapping("/auth/register")
-    public UserEntity save(@RequestBody UserRegisterDTO userDTO){
+    public User save(@RequestBody UserRegisterDTO userDTO){
         return this.userService.save(userDTO);
     }
 
@@ -37,12 +37,12 @@ public class AuthController {
         Authentication authDTO = new UsernamePasswordAuthenticationToken(loginDTO.username(), loginDTO.password());
     
         Authentication authentication = this.authManager.authenticate(authDTO);
-        UserEntity user = (UserEntity) authentication.getPrincipal();
+        User user = (User) authentication.getPrincipal();
     
         String token = this.jwtTokenProvider.generateToken(authentication);
     
         return new LoginResponse(user.getUsername(),
-                user.getRoles().stream().toList(), // Ahora devuelve roles sin "ROLE_"
+                user.getRole().strip(), // Ahora devuelve roles sin "ROLE_"
                 token);
     }
     

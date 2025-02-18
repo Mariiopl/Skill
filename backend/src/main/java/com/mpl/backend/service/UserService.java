@@ -1,33 +1,31 @@
 package com.mpl.backend.service;
 
 
-import java.util.List;
+import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.mpl.backend.dto.UserRegisterDTO;
 import com.mpl.backend.model.User;
 import com.mpl.backend.repository.UserRepository;
 
 @Service
 public class UserService {
+ private final UserRepository repository;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    public User save(User user) {
-        return userRepository.save(user);
+    public UserService(UserRepository repository, PasswordEncoder passwordEncoder) {
+        this.repository = repository;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    public User getById(Integer id) {
-        return userRepository.findById(id).orElse(null);
+    public Optional<User> findByUsername(String username) {
+        return this.repository.findByUsername(username);
     }
 
-    public void deleteById(Integer id) {
-        userRepository.deleteById(id);
-    }
-
-    public List<User> findAll() {
-        return userRepository.findAll();
+    public User save(UserRegisterDTO userDTO) {
+        User user = new User(userDTO.username(), passwordEncoder.encode(userDTO.password()), userDTO.dni());
+        return this.repository.save(user);
     }
 }

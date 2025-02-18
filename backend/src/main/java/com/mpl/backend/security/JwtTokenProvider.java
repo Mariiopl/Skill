@@ -18,7 +18,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import com.mpl.backend.model.UserEntity;
+import com.mpl.backend.model.User;
 
 import java.util.Date;
 
@@ -38,16 +38,15 @@ public class JwtTokenProvider {
     private Long jwtDurationSeconds;
 
     public String generateToken(Authentication authentication) {
-        UserEntity user = (UserEntity) authentication.getPrincipal();
+        User user = (User) authentication.getPrincipal();
 
         return Jwts.builder()
                 .signWith(Keys.hmacShaKeyFor(jwtSecret.getBytes()), SignatureAlgorithm.HS512)
                 .setHeaderParam("typ", "JWT")
-                .setSubject(Long.toString(user.getId()))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + (jwtDurationSeconds * 1000)))
                 .claim("username", user.getUsername())
-                .claim("email", user.getEmail())
+                .claim(jwtSecret, user)
                 .compact();
 
     }
