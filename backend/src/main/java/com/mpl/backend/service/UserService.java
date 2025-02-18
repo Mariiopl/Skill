@@ -25,7 +25,20 @@ public class UserService {
     }
 
     public User save(UserRegisterDTO userDTO) {
-        User user = new User(userDTO.username(), passwordEncoder.encode(userDTO.password()), userDTO.dni());
+        if (userDTO.username() == null || userDTO.password() == null || userDTO.dni() == null) {
+            throw new IllegalArgumentException("Username, password, and dni must not be null.");
+        }
+    
+        User user = new User();
+        user.setUsername(userDTO.username());
+        user.setPassword(passwordEncoder.encode(userDTO.password()));
+        user.setDni(userDTO.dni());
+        user.setNombre(userDTO.nombre());
+        user.setApellidos(userDTO.apellidos());
+        // Asigna un rol por defecto
+        user.setRole("USER");
+    
         return this.repository.save(user);
     }
+    
 }

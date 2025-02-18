@@ -1,8 +1,7 @@
 package com.mpl.backend.security;
 
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,8 +16,6 @@ para realizar la autenticación
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    Logger log = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
-
     private final UserService userService;
 
     public UserDetailsServiceImpl(UserService userService) {
@@ -27,9 +24,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        log.debug("loadUserByUsername {}", username);
-        return (UserDetails) this.userService.findByUsername(username).orElseThrow(
-                () -> new UsernameNotFoundException(username + " no encontrado")
-        );
+        return this.userService.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));
     }
 }
+

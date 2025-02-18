@@ -34,16 +34,25 @@ public class AuthController {
 
     @PostMapping("/auth/login")
     public LoginResponse login(@RequestBody LoginRequest loginDTO) {
+        // Autenticación
         Authentication authDTO = new UsernamePasswordAuthenticationToken(loginDTO.username(), loginDTO.password());
-    
-        Authentication authentication = this.authManager.authenticate(authDTO);
-        User user = (User) authentication.getPrincipal();
-    
-        String token = this.jwtTokenProvider.generateToken(authentication);
-    
-        return new LoginResponse(user.getUsername(),
-                user.getRole().strip(), // Ahora devuelve roles sin "ROLE_"
-                token);
+      System.err.println(loginDTO.username());
+      System.err.println(loginDTO.password());
+        Authentication authentication = authManager.authenticate(authDTO);
+        System.err.println("adios");
+        
+        // Generación del token JWT
+        String token = jwtTokenProvider.generateToken(authentication);
+       
+        // Obtener el usuario autenticado y devolver la respuesta
+        String username = ((User) authentication.getPrincipal()).getUsername();
+        String role = ((User) authentication.getPrincipal()).getRole();
+        
+        return new LoginResponse(username, role, token);
     }
+
     
 }
+
+
+
