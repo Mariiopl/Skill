@@ -3,11 +3,16 @@ package com.mpl.backend.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.ManyToOne;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
 public class Participante {
 
     @Id
@@ -19,7 +24,9 @@ public class Participante {
     private String centro;
 
     @ManyToOne
+    @JoinColumn(name = "especialidad_id")
     private Especialidad especialidad;
+    
 
     // Getters and Setters
     public Long getIdParticipante() {
@@ -54,11 +61,10 @@ public class Participante {
         this.centro = centro;
     }
 
-    public Especialidad getEspecialidad() {
-        return especialidad;
-    }
-
     public void setEspecialidad(Especialidad especialidad) {
         this.especialidad = especialidad;
     }
+
+
+
 }

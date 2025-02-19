@@ -4,5 +4,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.mpl.backend.model.Especialidad;
 
-public interface EspecialidadRepository extends JpaRepository<Especialidad, Integer> {
+public interface EspecialidadRepository extends JpaRepository<Especialidad, Long> {
 }

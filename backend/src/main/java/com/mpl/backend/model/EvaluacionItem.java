@@ -12,7 +12,7 @@ public class EvaluacionItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idEvaluacionItem;
+    private Long idEvaluacionItem;
 
     private Integer valoracion;
     private String explicacion;
@@ -24,11 +24,11 @@ public class EvaluacionItem {
     private Item item;
 
     // Getters and Setters
-    public Integer getIdEvaluacionItem() {
+    public Long getIdEvaluacionItem() {
         return idEvaluacionItem;
     }
 
-    public void setIdEvaluacionItem(Integer idEvaluacionItem) {
+    public void setIdEvaluacionItem(Long idEvaluacionItem) {
         this.idEvaluacionItem = idEvaluacionItem;
     }
 

@@ -19,17 +19,18 @@ public class EspecialidadService {
         return especialidadRepository.save(especialidad);
     }
 
-    public Especialidad getById(Integer id) {
+    public Especialidad getById(Long id) {
         return especialidadRepository.findById(id).orElse(null);
     }
 
-    public void deleteById(Integer id) {
+    public void deleteById(Long id) {
         especialidadRepository.deleteById(id);
     }
 
     public List<Especialidad> findAll() {
         return especialidadRepository.findAll();
     }
+
 }
 
 

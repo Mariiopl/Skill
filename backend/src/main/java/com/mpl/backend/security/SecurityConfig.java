@@ -37,6 +37,8 @@ public class SecurityConfig {
 
         http.authorizeRequests(requests -> requests
                 .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/participantes/**").permitAll()
+                .requestMatchers("/especialidad").permitAll()
                 .anyRequest()
                 .authenticated());
 

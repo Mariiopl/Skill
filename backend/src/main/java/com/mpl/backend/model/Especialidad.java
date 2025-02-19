@@ -10,17 +10,17 @@ import jakarta.persistence.Id;
 public class Especialidad {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idEspecialidad;
+    private Long idEspecialidad;
 
     private String nombre;
     private String codigo;
 
     // Getters and Setters
-    public Integer getIdEspecialidad() {
+    public Long getIdEspecialidad() {
         return idEspecialidad;
     }
 
-    public void setIdEspecialidad(Integer idEspecialidad) {
+    public void setIdEspecialidad(Long idEspecialidad) {
         this.idEspecialidad = idEspecialidad;
     }
 

@@ -11,7 +11,7 @@ public class Prueba {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idPrueba;
+    private Long idPrueba;
 
     private String enunciado;
     private Integer puntuacionMaxima;
@@ -20,11 +20,11 @@ public class Prueba {
     private Especialidad especialidad;
 
     // Getters and Setters
-    public Integer getIdPrueba() {
+    public Long getIdPrueba() {
         return idPrueba;
     }
 
-    public void setIdPrueba(Integer idPrueba) {
+    public void setIdPrueba(Long idPrueba) {
         this.idPrueba = idPrueba;
     }
 

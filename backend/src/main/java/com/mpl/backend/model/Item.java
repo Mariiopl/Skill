@@ -12,7 +12,7 @@ public class Item {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idItem;
+    private Long idItem;
 
     private String descripcion;
     private Integer peso;
@@ -22,11 +22,11 @@ public class Item {
     private Prueba prueba;
 
     // Getters and Setters
-    public Integer getIdItem() {
+    public Long getIdItem() {
         return idItem;
     }
 
-    public void setIdItem(Integer idItem) {
+    public void setIdItem(Long idItem) {
         this.idItem = idItem;
     }
 
