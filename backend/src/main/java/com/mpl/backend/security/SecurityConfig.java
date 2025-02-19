@@ -38,7 +38,11 @@ public class SecurityConfig {
         http.authorizeRequests(requests -> requests
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/participantes/**").permitAll()
-                .requestMatchers("/especialidad").permitAll()
+                .requestMatchers("/especialidad/**").permitAll()
+                .requestMatchers("/pruebas/**").permitAll()
+                .requestMatchers("/items/**").permitAll()
+                .requestMatchers("/evaluaciones/**").permitAll()
+                .requestMatchers("/evaluacion-items/**").permitAll()
                 .anyRequest()
                 .authenticated());
 

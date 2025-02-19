@@ -1,17 +1,13 @@
 package com.mpl.backend.service;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.mpl.backend.dto.ParticipanteDTO;
 import com.mpl.backend.model.Especialidad;
 import com.mpl.backend.model.Participante;
 import com.mpl.backend.repository.EspecialidadRepository;
 import com.mpl.backend.repository.ParticipanteRepository;
-
-import jakarta.annotation.PostConstruct;
 
 @Service
 public class ParticipanteService {

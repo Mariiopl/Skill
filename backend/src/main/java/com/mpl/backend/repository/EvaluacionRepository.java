@@ -4,5 +4,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.mpl.backend.model.Evaluacion;
 
-public interface EvaluacionRepository extends JpaRepository<Evaluacion, Integer> {
+public interface EvaluacionRepository extends JpaRepository<Evaluacion, Long> {
 }

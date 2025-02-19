@@ -48,8 +48,9 @@ public class Prueba {
         return especialidad;
     }
 
-    public void setEspecialidad(Especialidad especialidad) {
-        this.especialidad = especialidad;
+    public void setEspecialidad(Especialidad especialidad2) {
+        this.especialidad = especialidad2;
     }
+
 }
 
