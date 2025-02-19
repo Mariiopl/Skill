@@ -34,26 +34,8 @@ public class ParticipanteService {
         participante.setEspecialidad(especialidad);
     
         return participanteRepository.save(participante);
-    }
-    @PostConstruct
-    public void init() {
-        testCreate();
-    }
-    public void testCreate() {
-        Especialidad especialidad = especialidadRepository.findById(1L).orElseThrow(() -> new RuntimeException("Especialidad no encontrada"));
+    }    
     
-        ParticipanteDTO dto = new ParticipanteDTO("Carlos", "Ramírez", "Centro Ejemplo", 1L);
-        Participante participante = new Participante();
-        participante.setNombre(dto.nombre());
-        participante.setApellidos(dto.apellidos());
-        participante.setCentro(dto.centro());
-        participante.setEspecialidad(especialidad);
-    
-        participanteRepository.save(participante);
-    }
-        
-    
-
     public Participante save(Participante participante) {
         return participanteRepository.save(participante);
     }
