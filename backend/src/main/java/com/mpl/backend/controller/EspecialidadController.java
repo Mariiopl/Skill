@@ -1,9 +1,12 @@
 package com.mpl.backend.controller;
 
 
+import com.mpl.backend.dto.EspecialidadDTO;
 import com.mpl.backend.model.Especialidad;
 import com.mpl.backend.service.EspecialidadService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,5 +40,11 @@ public class EspecialidadController {
     @DeleteMapping("/{id}")
     public void deleteEspecialidad(@PathVariable Long id) {
         especialidadService.deleteById(id);
+    }
+    // Actualizar un participante por ID
+    @PutMapping("/{id}")
+    public ResponseEntity<Especialidad> updateEspecialidad(@RequestBody EspecialidadDTO especialidadDTO, @PathVariable Long id) {
+        Especialidad especialidad = especialidadService.updateEspecialidad(especialidadDTO, id);
+        return new ResponseEntity<>(especialidad, HttpStatus.OK);
     }
 }

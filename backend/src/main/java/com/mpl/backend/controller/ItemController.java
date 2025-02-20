@@ -41,4 +41,11 @@ public class ItemController {
     public void deleteItem(@PathVariable Long id) {
         itemService.deleteById(id);
     }
+
+    // Actualizar un item por ID
+    @PutMapping("/{id}")
+    public ResponseEntity<Item> updateItem(@RequestBody ItemDTO itemDTO, @PathVariable Long id) {
+        Item item = itemService.updateItem(itemDTO, id);
+        return new ResponseEntity<>(item, HttpStatus.OK);
+    }
 }

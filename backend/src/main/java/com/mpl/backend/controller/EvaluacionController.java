@@ -41,4 +41,11 @@ public class EvaluacionController {
     public void deleteEvaluacion(@PathVariable Long id) {
         evaluacionService.deleteById(id);
     }
+    
+    // Actualizar una evaluacion por ID
+    @PutMapping("/{id}")
+    public ResponseEntity<Evaluacion> updateEvaluacion(@RequestBody EvaluacionDTO evaluacionDTO, @PathVariable Long id) {
+        Evaluacion evaluacion = evaluacionService.updateEvaluacion(evaluacionDTO, id);
+        return new ResponseEntity<>(evaluacion, HttpStatus.OK);
+    }
 }

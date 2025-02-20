@@ -47,5 +47,13 @@ public class PruebaService {
         return pruebaRepository.findAll();
     }
 
+    public Prueba updatePrueba(PruebaDTO pruebaDTO, Long id) {
+        Prueba prueba = pruebaRepository.findById(id).orElse(null);
+        prueba.setEnunciado(pruebaDTO.enunciado());
+        prueba.setPuntuacionMaxima(pruebaDTO.puntuacionMaxima());
+        prueba.setEspecialidad(especialidadRepository.findById(pruebaDTO.idEspecialidad()).orElse(null));
+        return pruebaRepository.save(prueba);
+    }
+
 }
 

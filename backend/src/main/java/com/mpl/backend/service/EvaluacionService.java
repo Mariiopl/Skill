@@ -63,4 +63,14 @@ public class EvaluacionService {
     public void deleteById(Long id) {
         evaluacionRepository.deleteById(id);
     }
+
+    // Actualizar una evaluacion por ID
+    public Evaluacion updateEvaluacion(EvaluacionDTO evaluacionDTO, Long id) {
+        Evaluacion evaluacion = evaluacionRepository.findById(id).orElse(null);
+        evaluacion.setNotaFinal(evaluacionDTO.notaFinal());
+        evaluacion.setParticipante(participanteRepository.findById(evaluacionDTO.idParticipante()).orElse(null));
+        evaluacion.setPrueba(pruebaRepository.findById(evaluacionDTO.idPrueba()).orElse(null));
+        evaluacion.setUser(userRepository.findById(evaluacionDTO.idUser()).orElse(null));
+        return evaluacionRepository.save(evaluacion);
+    }
 }

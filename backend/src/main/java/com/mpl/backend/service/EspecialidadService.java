@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.mpl.backend.dto.EspecialidadDTO;
 import com.mpl.backend.model.Especialidad;
 import com.mpl.backend.repository.EspecialidadRepository;
 
@@ -29,6 +30,13 @@ public class EspecialidadService {
 
     public List<Especialidad> findAll() {
         return especialidadRepository.findAll();
+    }
+
+    public Especialidad updateEspecialidad(EspecialidadDTO especialidadDTO, Long id) {
+        Especialidad especialidad = especialidadRepository.findById(id).orElse(null);
+        especialidad.setNombre(especialidadDTO.nombre());
+        especialidad.setCodigo(especialidadDTO.codigo());
+        return especialidadRepository.save(especialidad);
     }
 
 }

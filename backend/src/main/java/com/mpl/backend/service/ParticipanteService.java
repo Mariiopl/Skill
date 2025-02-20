@@ -47,4 +47,12 @@ public class ParticipanteService {
     public List<Participante> findAll() {
         return participanteRepository.findAll();
     }
+    public Participante updateParticipante(ParticipanteDTO participanteDTO, Long id) {
+        Participante participante = participanteRepository.findById(id).orElse(null);
+        participante.setNombre(participanteDTO.nombre());
+        participante.setApellidos(participanteDTO.apellidos());
+        participante.setCentro(participanteDTO.centro());
+        participante.setEspecialidad(especialidadRepository.findById(participanteDTO.idEspecialidad()).orElse(null));
+        return participanteRepository.save(participante);
+    }
 }

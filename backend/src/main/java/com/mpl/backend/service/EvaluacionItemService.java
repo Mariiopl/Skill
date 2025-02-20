@@ -55,4 +55,14 @@ public class EvaluacionItemService {
     public void deleteById(Long id) {
         evaluacionItemRepository.deleteById(id);
     }
+
+    // Actualizar un EvaluacionItem por ID
+    public EvaluacionItem updateEvaluacionItem(EvaluacionItemDTO evaluacionItemDTO, Long id) {
+        EvaluacionItem evaluacionItem = evaluacionItemRepository.findById(id).orElse(null);
+        evaluacionItem.setValoracion(evaluacionItemDTO.valoracion());
+        evaluacionItem.setExplicacion(evaluacionItemDTO.explicacion());
+        evaluacionItem.setEvaluacion(evaluacionRepository.findById(evaluacionItemDTO.idEvaluacion()).orElse(null));
+        evaluacionItem.setItem(itemRepository.findById(evaluacionItemDTO.idItem()).orElse(null));
+        return evaluacionItemRepository.save(evaluacionItem);
+    }
 }

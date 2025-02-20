@@ -42,4 +42,11 @@ public class ParticipanteController {
     public void deleteParticipante(@PathVariable Long id) {
         participanteService.deleteById(id);
     }
+
+    // Actualizar un participante por ID
+    @PutMapping("/{id}")
+    public ResponseEntity<Participante> updateParticipante(@RequestBody ParticipanteDTO participanteDTO, @PathVariable Long id) {
+        Participante participante = participanteService.updateParticipante(participanteDTO, id);
+        return new ResponseEntity<>(participante, HttpStatus.OK);
+    }
 }

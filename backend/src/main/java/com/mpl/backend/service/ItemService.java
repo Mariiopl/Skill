@@ -52,4 +52,14 @@ public class ItemService {
     public List<Item> findAll() {
         return itemRepository.findAll();
     }
+
+    // Actualizar un item por ID
+    public Item updateItem(ItemDTO itemDTO, Long id) {
+        Item item = itemRepository.findById(id).orElse(null);
+        item.setDescripcion(itemDTO.descripcion());
+        item.setPeso(itemDTO.peso());
+        item.setGradosConsecuion(itemDTO.gradosConsecuion());
+        item.setPrueba(pruebaRepository.findById(itemDTO.idPrueba()).orElse(null));
+        return itemRepository.save(item);
+    }
 }
