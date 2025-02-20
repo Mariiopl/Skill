@@ -9,14 +9,14 @@ import { map } from 'rxjs';
 export class LoginService {
 
   token: string;
-  perfil: string; // admin, experto
+  role: string; // admin, experto
   logeado: boolean;
   usuario: any; // objeto con los datos del usuario
 
 
   constructor(private http: HttpClient) {
     this.token = "";
-    this.perfil = "";
+    this.role = "";
     this.logeado = false;
     this.usuario = {};
   }
@@ -25,7 +25,7 @@ export class LoginService {
     var objeto: any;
     objeto = {
       token: this.token,
-      perfil: this.perfil,
+      role: this.role,
       logeado: this.logeado,
       user: this.usuario
     }
@@ -41,14 +41,14 @@ export class LoginService {
       var objeto = JSON.parse(cadena);
 
       this.token = objeto.token;
-      this.perfil = objeto.perfil;
+      this.role = objeto.role;
       this.logeado = objeto.logeado;
       this.usuario = objeto.usuario;
 
     } else {
 
       this.token = "";
-      this.perfil = "";
+      this.role = "";
       this.logeado = false;
       this.usuario = {};
 
@@ -61,9 +61,9 @@ export class LoginService {
     let objeto:any;
     objeto = this;
 
-    return this.http.post("http://localhost/SILVERIO/2-Trimestre/Servidor/login.php", {
-      user: user,
-      pass: pass
+    return this.http.post("http://localhost:8080/auth/login", {
+      username: user,
+      password: pass
     })
     .pipe(map((data:any)=>{
       //Analizar respuesta
@@ -71,13 +71,13 @@ export class LoginService {
       if(data!=null && data.token!=""){
 
 
-        objeto.usuario={"nombre":data.user}
-        objeto.perfil = data.perfil;
+        objeto.usuario={"nombre":data.username}
+        objeto.role = data.role;
         objeto.token = data.token;
         objeto.logeado = true;
         objeto.almacenar();
 
-        respuesta= {"funciona":true, "perfil":data.perfil};
+        respuesta= {"funciona":true, "Role":data.role};
 
       }else{
         
@@ -128,7 +128,7 @@ export class LoginService {
     let respuesta:string="";
     let cont:string|null=sessionStorage.getItem("LOGIN");
     if (cont) {
-      respuesta=JSON.parse(cont||"").perfil;
+      respuesta=JSON.parse(cont||"").role;
     }
     return respuesta;
   }

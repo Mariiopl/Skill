@@ -29,7 +29,7 @@ export class LoginComponent {
       
       if(v.funciona)
 
-        this.route.navigate(["/"+v.perfil]);
+        this.route.navigate(["/"+v.Role]);
 
       else
 

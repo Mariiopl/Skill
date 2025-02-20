@@ -25,6 +25,12 @@ export class ParticipanteService {
   constructor(private http: HttpClient) { }
 
   getParticipantes(): Observable<Participante[]> {
+    console.log('Llamada a: ', `${this.apiUrl}/todos`);
     return this.http.get<Participante[]>(`${this.apiUrl}/todos`);
   }
+  
+  getParticipanteById(id: number): Observable<Participante> {
+    return this.http.get<Participante>(`${this.apiUrl}/${id}`);
+  }
+
 }
