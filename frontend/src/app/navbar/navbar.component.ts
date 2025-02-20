@@ -12,21 +12,19 @@ import { LoginService } from '../login.service';
 export class NavbarComponent {
 
   // logeado : boolean;
-  perfil : string;
+  role : string;
   nombre : string;
   // s:LoginService;
 
   constructor(private route:Router, private servicio: LoginService) {
-    this.perfil = "";
+    this.role = "";
     this.nombre = "";
   }
 
   logout() {
     this.servicio.logout();
-    this.nombre = "";
     this.route.navigate(['/']);
   }
-
   login() {
     this.route.navigate(['/login']);
   }

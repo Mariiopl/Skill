@@ -14,13 +14,13 @@
                 <li class="nav-item" *ngIf="isLogged()">
                     <a class="nav-link" href="#">Menú 2</a>
                 </li>
-                <li class="nav-item" *ngIf="isLogged() && perfil == 'admin'">
+                <li class="nav-item" *ngIf="isLogged() && role == 'admin'">
                     <a class="nav-link" href="#">Menú 1 ADMIN</a>
                 </li>
-                <li class="nav-item" *ngIf="isLogged() && perfil == 'admin'">
+                <li class="nav-item" *ngIf="isLogged() && role == 'admin'">
                     <a class="nav-link" href="#">Menú 2 ADMIN</a>
                 </li>
-                <li class="nav-item" *ngIf="isLogged() && perfil == 'experto'">
+                <li class="nav-item" *ngIf="isLogged() && role == 'experto'">
                     <a class="nav-link" href="#">Menú 1 EXPERTO</a>
                 </li>
             </ul>

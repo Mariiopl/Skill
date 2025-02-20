@@ -97,13 +97,28 @@ export class LoginService {
   }
 
   logout() {
-    let objeto: any=this;
-    let cont:string|null=sessionStorage.getItem("LOGIN");
-    this.http.get("http://localhost/SILVERIO/2-Trimestre/Servidor/login.php?deslogear="+
-                  JSON.parse(cont||"").token)
-                  .subscribe(function(data) {
-                    objeto.machacar();
-                  })  
+    let cont: string | null = sessionStorage.getItem("LOGIN");
+  
+    if (cont) {
+      let token = JSON.parse(cont).token;
+  
+      // Configurar los headers con el token
+      let headers = { 'Authorization': `Bearer ${token}` };
+  
+      // Hacer el logout en el backend
+      this.http.post("http://localhost:8080/auth/logout", {}, { headers })
+        .subscribe({
+          next: () => {
+            // Eliminar sesión solo si el logout fue exitoso
+            sessionStorage.removeItem("LOGIN");
+          },
+          error: (error) => {
+            alert("No se pudo cerrar la sesión.");
+          }
+        });
+    } else {
+      console.warn("No hay sesión activa para cerrar.");
+    }
   }
 
   isLogged():boolean {
