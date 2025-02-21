@@ -48,6 +48,7 @@ public class SecurityConfig {
                 .requestMatchers("/items/**").permitAll()
                 .requestMatchers("/evaluaciones/**").permitAll()
                 .requestMatchers("/evaluacion-items/**").permitAll()
+                .requestMatchers("/users/**").permitAll()
                 .anyRequest()
                 .authenticated());
 

@@ -5,6 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "java",
+            "name": "BackendApplication",
+            "request": "launch",
+            "mainClass": "com.mpl.backend.BackendApplication",
+            "projectName": "backend"
+        },
+        {
             "type": "chrome",
             "request": "launch",
             "name": "Iniciar Chrome para localhost",
