@@ -12,10 +12,10 @@ import { NavbarComponent } from './navbar/navbar.component';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'skills';
+  title = 'Andalucía Skills';
   nombre : string;
 
   constructor () {
-    this.nombre = 'Mario';
+    this.nombre = 'Andalucía Skills';
   }
 }

@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-expertos',
-  // Si usas componentes standalone (Angular 14+), asegúrate de incluir CommonModule
   standalone: true,
   imports: [CommonModule],
   templateUrl: './expertos.component.html',
@@ -20,14 +19,8 @@ export class ExpertosComponent implements OnInit {
   }
 
   cargarExpertos(): void {
-    this.expertosService.getExpertos().subscribe({
-      next: (data) => {
-        this.expertos = data;
-        console.log('Expertos cargados:', data);
-      },
-      error: (err) => {
-        console.error('Error al cargar expertos', err);
-      }
+    this.expertosService.getExpertos().subscribe(data => {
+      this.expertos = data;
     });
   }
 }

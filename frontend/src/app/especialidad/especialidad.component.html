@@ -1,1 +1,49 @@
-<p>especialidad works!</p>
+<!-- Botón para crear nueva especialidad -->
+<button (click)="openCreateModal()">Crear Nueva Especialidad</button>
+
+<!-- Modal para crear o editar especialidad -->
+<div *ngIf="isModalOpen" class="modal">
+  <div class="modal-content">
+    <span class="close" (click)="closeModal()">&times;</span>
+
+    <h3>{{ isEditMode ? 'Editar Especialidad' : 'Crear Nueva Especialidad' }}</h3>
+
+    <form (ngSubmit)="saveEspecialidad()">
+      <label for="nombre">Nombre</label>
+      <input type="text" id="nombre" [(ngModel)]="currentEspecialidad.nombre" name="nombre" required />
+
+      <label for="codigo">Código</label>
+      <input type="text" id="codigo" [(ngModel)]="currentEspecialidad.codigo" name="codigo" required />
+
+      <button type="submit">{{ isEditMode ? 'Actualizar' : 'Crear' }} Especialidad</button>
+    </form>
+  </div>
+</div>
+
+<!-- Tabla de especialidades -->
+<h2>Gestión de Especialidades</h2>
+
+<table *ngIf="especialidades.length > 0">
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Código</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let especialidad of especialidades">
+      <td>{{ especialidad.nombre }}</td>
+      <td>{{ especialidad.codigo }}</td>
+      <td>
+        <button (click)="openEditModal(especialidad)">Editar</button>
+        <button (click)="deleteEspecialidad(especialidad.idEspecialidad)">Eliminar</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Mensaje si no hay especialidades -->
+<div *ngIf="especialidades.length === 0">
+  No se encontraron especialidades.
+</div>

@@ -15,7 +15,7 @@
                     <a class="nav-link" href="#">Menú 2</a>
                 </li> -->
                 <li class="nav-item" *ngIf="isLogged() && getRole() === 'admin'">
-                    <a class="nav-link" href="#">Menú 1 ADMIN</a>
+                    <a class="nav-link" routerLink="/admin/especialidad">Gestionar Especialidades</a>
                 </li>
                 <li class="nav-item" *ngIf="isLogged() && getRole() === 'admin'">
                     <a class="nav-link" href="#">Menú 2 ADMIN</a>

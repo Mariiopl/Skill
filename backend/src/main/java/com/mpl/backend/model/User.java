@@ -37,7 +37,7 @@ public class User implements UserDetails {
         this.username = username;
         this.password = password;
         this.dni = dni;
-        this.role = "USER"; // rol por defecto
+        this.role = "experto"; // rol por defecto
     }
 
     // Getters and setters

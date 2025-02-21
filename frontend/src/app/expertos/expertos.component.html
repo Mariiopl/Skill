@@ -3,15 +3,15 @@
 <table class="table" *ngIf="expertos && expertos.length > 0">
   <thead>
     <tr>
-      <th>ID</th>
       <th>Nombre</th>
-      <!-- Agrega otras columnas si es necesario -->
+      <th>Especialidad</th>     
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let experto of expertos">
-      <td>{{ experto.id }}</td>
       <td>{{ experto.nombre }}</td>
+      <td>{{ experto.especialidad?.nombre }}</td>
+
     </tr>
   </tbody>
 </table>
