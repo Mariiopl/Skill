@@ -5,6 +5,7 @@ import { LoginService } from '../login.service';
 
 @Component({
   selector: 'app-navbar',
+  standalone: true,
   imports: [ CommonModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
@@ -33,5 +34,8 @@ export class NavbarComponent {
   }
   getNombre():string {
     return this.servicio.getNombre();
+  }
+  getRole(): string {
+    return this.servicio.getPerfil();
   }
 }

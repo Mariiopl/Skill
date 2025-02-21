@@ -8,29 +8,29 @@
         <!-- Contenido del menú -->
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto">
-                <li class="nav-item" *ngIf="isLogged()">
+                <!-- <li class="nav-item" *ngIf="isLogged()">
                     <a class="nav-link" href="#">Menú 1</a>
                 </li>
                 <li class="nav-item" *ngIf="isLogged()">
                     <a class="nav-link" href="#">Menú 2</a>
-                </li>
-                <li class="nav-item" *ngIf="isLogged() && role == 'admin'">
+                </li> -->
+                <li class="nav-item" *ngIf="isLogged() && getRole() === 'admin'">
                     <a class="nav-link" href="#">Menú 1 ADMIN</a>
                 </li>
-                <li class="nav-item" *ngIf="isLogged() && role == 'admin'">
+                <li class="nav-item" *ngIf="isLogged() && getRole() === 'admin'">
                     <a class="nav-link" href="#">Menú 2 ADMIN</a>
                 </li>
-                <li class="nav-item" *ngIf="isLogged() && role == 'experto'">
+                <li class="nav-item" *ngIf="isLogged() && getRole() === 'experto'">
                     <a class="nav-link" href="#">Menú 1 EXPERTO</a>
                 </li>
             </ul>
             <ul class="navbar-nav">
-                <p class="navbar-text text-light me-3" *ngIf="isLogged()">Bienvenido {{getNombre()}}</p>
+                <p class="navbar-text text-light me-3" *ngIf="isLogged()">Bienvenido {{ getNombre() }}</p>
                 <li class="nav-item" *ngIf="isLogged()">
-                    <button class="btn btn-outline-danger" (click)=logout()>Logout</button>
+                    <button class="btn btn-outline-danger" (click)="logout()">Logout</button>
                 </li>
                 <li class="nav-item" *ngIf="!isLogged()">
-                    <button class="btn btn-outline-primary" (click)=login()>Login</button>
+                    <button class="btn btn-outline-primary" (click)="login()">Login</button>
                 </li>
             </ul>
         </div>
