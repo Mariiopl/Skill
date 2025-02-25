@@ -35,6 +35,7 @@ public class SecurityConfig {
 
     }
 
+    @SuppressWarnings({ "deprecation", "removal" })
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 

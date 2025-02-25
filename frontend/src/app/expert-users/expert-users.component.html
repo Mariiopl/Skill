@@ -1,78 +1,81 @@
 <div *ngIf="error" class="alert alert-danger">
-    {{ error }}
-  </div>
-  
-  <h2>Expertos Registrados</h2>
-  
-  <!-- Botón para abrir el formulario de creación de experto -->
-  <button class="btn btn-primary mb-3" (click)="openCreateExpertModal()">Crear Nuevo Experto</button>
-  
-  <table class="table" *ngIf="experts.length > 0">
-    <thead>
-      <tr>
-        <th>Username</th>
-        <th>Nombre</th>
-        <th>Apellidos</th>
-        <th>DNI</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let expert of experts">
-        <td>{{ expert.username }}</td>
-        <td>{{ expert.nombre }}</td>
-        <td>{{ expert.apellidos }}</td>
-        <td>{{ expert.dni }}</td>
-      </tr>
-    </tbody>
-  </table>
-  
-  <div *ngIf="experts.length === 0 && !error">
-    No hay expertos registrados.
-  </div>
-  
-  <!-- Modal para crear nuevo experto -->
+  {{ error }}
+</div>
+
+<h2>Expertos Registrados</h2>
+
+<!-- Botón para abrir el formulario de creación de experto -->
+<button class="btn btn-primary mb-3" (click)="openCreateModal()">Crear Nuevo Experto</button>
+
+<table class="table" *ngIf="experts.length > 0">
+  <thead>
+    <tr>
+      <th>Username</th>
+      <th>Nombre</th>
+      <th>Apellidos</th>
+      <th>DNI</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let expert of experts">
+      <td>{{ expert.username }}</td>
+      <td>{{ expert.nombre }}</td>
+      <td>{{ expert.apellidos }}</td>
+      <td>{{ expert.dni }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<div *ngIf="experts.length === 0 && !error">
+  No hay expertos registrados.
+</div>
+
+<!-- Modal para crear nuevo experto -->
 <div class="modal" tabindex="-1" [ngClass]="{'show': isCreateModalOpen}" [ngStyle]="{'display': isCreateModalOpen ? 'block' : 'none'}">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Crear Nuevo Experto</h5>
-          <button type="button" class="btn-close" aria-label="Close" (click)="closeCreateModal()"></button>
-        </div>
-        <div class="modal-body">
-          <form (ngSubmit)="createExpert()">
-            <div class="mb-3">
-              <label for="username" class="form-label">Username</label>
-              <input type="text" id="username" [(ngModel)]="newExpert.username" name="username" class="form-control" required>
-            </div>
-            <div class="mb-3">
-              <label for="password" class="form-label">Contraseña</label>
-              <input type="password" id="password" [(ngModel)]="newExpert.password" name="password" class="form-control" required>
-            </div>
-            <div class="mb-3">
-              <label for="password2" class="form-label">Repetir Contraseña</label>
-              <input type="password" id="password2" [(ngModel)]="newExpert.password2" name="password2" class="form-control" required>
-            </div>
-            <div class="mb-3">
-              <label for="dni" class="form-label">DNI</label>
-              <input type="text" id="dni" [(ngModel)]="newExpert.dni" name="dni" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label for="especialidadId" class="form-label">Especialidad</label>
-                <input type="number" id="especialidadId" [(ngModel)]="newExpert.especialidadId" name="especialidadId" class="form-control" required>
-              </div>              
-            <div class="mb-3">
-              <label for="nombre" class="form-label">Nombre</label>
-              <input type="text" id="nombre" [(ngModel)]="newExpert.nombre" name="nombre" class="form-control" required>
-            </div>
-            <div class="mb-3">
-              <label for="apellidos" class="form-label">Apellidos</label>
-              <input type="text" id="apellidos" [(ngModel)]="newExpert.apellidos" name="apellidos" class="form-control" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Crear Experto</button>
-          </form>
-        </div>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Crear Nuevo Experto</h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="closeCreateModal()"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="createExpert()">
+          <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" id="username" [(ngModel)]="newExpert.username" name="username" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre</label>
+            <input type="text" id="nombre" [(ngModel)]="newExpert.nombre" name="nombre" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label for="apellidos" class="form-label">Apellidos</label>
+            <input type="text" id="apellidos" [(ngModel)]="newExpert.apellidos" name="apellidos" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label for="dni" class="form-label">DNI</label>
+            <input type="text" id="dni" [(ngModel)]="newExpert.dni" name="dni" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Contraseña</label>
+            <input type="password" id="password" [(ngModel)]="newExpert.password" name="password" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label for="password2" class="form-label">Repetir Contraseña</label>
+            <input type="password" id="password2" [(ngModel)]="newExpert.password2" name="password2" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label for="especialidad">Especialidad:</label>
+            <select id="especialidad" [(ngModel)]="newExpert.idEspecialidad" name="idEspecialidad" class="form-select" required (ngModelChange)="convertIdEspecialidad($event)">
+              <option value="" disabled selected>Selecciona una especialidad</option>
+              <option *ngFor="let especialidad of especialidades" [value]="especialidad.idEspecialidad">
+                {{ especialidad.nombre }}
+              </option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary">Crear Experto</button>
+        </form>
       </div>
     </div>
   </div>
-
-  
+</div>

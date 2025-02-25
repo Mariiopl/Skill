@@ -26,4 +26,5 @@ public class UserController {
         newUser.setRole("experto");
         return userService.saveUser(newUser);
     }
+    
 }

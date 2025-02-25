@@ -21,7 +21,10 @@
                     <a class="nav-link" routerLink="/admin/expert-users">Gestionar Expertos</a>
                 </li>
                 <li class="nav-item" *ngIf="isLogged() && getRole() === 'experto'">
-                    <a class="nav-link" href="#">Menú 1 EXPERTO</a>
+                    <a class="nav-link" routerLink="/experto/lista-participantes">Lista de participantes</a>
+                </li>
+                <li class="nav-item" *ngIf="isLogged() && getRole() === 'experto'">
+                    <a class="nav-link" routerLink="/experto/pruebas">Pruebas</a>
                 </li>
             </ul>
             <ul class="navbar-nav">

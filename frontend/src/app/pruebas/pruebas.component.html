@@ -1,0 +1,69 @@
+<div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
+  
+  <h2>Lista de Pruebas</h2>
+  
+  <!-- Botón para abrir el formulario de creación de prueba -->
+  <button class="btn btn-primary mb-3" (click)="openCreateModal()">Crear Nueva Prueba</button>
+  
+  <table class="table" *ngIf="pruebas.length > 0">
+    <thead>
+      <tr>
+        <th>Enunciado</th>
+        <th>Puntuación Máxima</th>
+        <th>Especialidad</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let prueba of pruebas">
+        <td>{{ prueba.enunciado }}</td>
+        <td>{{ prueba.puntuacionMaxima }}</td>
+        <td>{{ prueba.especialidad.nombre }}</td>
+        <td>
+          <button class="btn btn-warning" (click)="editPrueba(prueba.idPrueba)">Editar</button>
+          <button class="btn btn-danger" (click)="deletePrueba(prueba.idPrueba)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <div *ngIf="pruebas.length === 0 && !error">
+    No hay pruebas registradas.
+  </div>
+  
+  <!-- Modal para crear o editar prueba -->
+  <div class="modal" tabindex="-1" [ngClass]="{'show': isCreateModalOpen}" [ngStyle]="{'display': isCreateModalOpen ? 'block' : 'none'}">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Crear Nueva Prueba</h5>
+          <button type="button" class="btn-close" aria-label="Close" (click)="closeCreateModal()"></button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="createPrueba()">
+            <div class="mb-3">
+              <label for="enunciado" class="form-label">Enunciado</label>
+              <input type="text" id="enunciado" [(ngModel)]="newPrueba.enunciado" name="enunciado" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label for="puntuacionMaxima" class="form-label">Puntuación Máxima</label>
+              <input type="number" id="puntuacionMaxima" [(ngModel)]="newPrueba.puntuacionMaxima" name="puntuacionMaxima" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label for="especialidad">Especialidad:</label>
+              <select id="especialidad" [(ngModel)]="newPrueba.idEspecialidad" name="idEspecialidad" class="form-control" required>
+                <option value="" disabled selected>Selecciona una especialidad</option>
+                <option *ngFor="let especialidad of especialidades" [value]="especialidad.idEspecialidad">
+                  {{ especialidad.nombre }}
+                </option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Crear Prueba</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  

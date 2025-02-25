@@ -3,6 +3,7 @@ import { EspecialidadService, Especialidad } from '../services/especialidad.serv
 import { FormsModule } from '@angular/forms'; // Importamos FormsModule para ngModel
 import { CommonModule } from '@angular/common'; // Importamos CommonModule para ngClass
 
+
 @Component({
   selector: 'app-especialidad',
   templateUrl: './especialidad.component.html',

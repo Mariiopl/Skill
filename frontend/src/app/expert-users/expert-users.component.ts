@@ -2,20 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
 import { RouterLink } from '@angular/router';
-
-interface User {
-  id?: number;
-  role?: string;
-  username: string;
-  password?: string;
-  password2?: string;
-  nombre: string;
-  apellidos: string;
-  dni: string;
-  especialidadId?: any;
-}
 
 @Component({
   selector: 'app-expert-users',
@@ -25,24 +12,34 @@ interface User {
   styleUrls: ['./expert-users.component.css']
 })
 export class ExpertUsersComponent implements OnInit {
-  experts: User[] = [];
+  experts: any[] = [];
+  especialidades: any[] = [];
   error: string = '';
   isCreateModalOpen: boolean = false;
 
-  newExpert: User = {
+  // Objeto para crear un nuevo experto
+  newExpert: any = {
     username: '',
     password: '',
+    password2: '',
     nombre: '',
     apellidos: '',
-    dni: ''
+    dni: '',
+    idEspecialidad: null
   };
 
   constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
-    this.http.get<User[]>('http://localhost:8080/users').subscribe({
-      next: (users) => {
-        this.experts = users.filter(user => user.role === 'experto');
+    this.loadExperts();
+    this.loadEspecialidades();
+  }
+
+  loadExperts(): void {
+    this.http.get<any[]>('http://localhost:8080/users').subscribe({
+      next: (data) => {
+        // Filtra solo los expertos
+        this.experts = data.filter(user => user.role === 'experto');
       },
       error: (err) => {
         console.error(err);
@@ -51,18 +48,54 @@ export class ExpertUsersComponent implements OnInit {
     });
   }
 
-  openCreateExpertModal(): void {
+  loadEspecialidades(): void {
+    this.http.get<any[]>('http://localhost:8080/especialidad').subscribe({
+      next: (data) => {
+        this.especialidades = data;
+        console.log('Especialidades cargadas:', data);
+      },
+      error: (err) => {
+        console.error(err);
+        this.error = 'Error al cargar las especialidades.';
+      }
+    });
+  }
+
+  openCreateModal(): void {
     this.isCreateModalOpen = true;
+    // Reiniciar el formulario
+    this.newExpert = {
+      username: '',
+      password: '',
+      password2: '',
+      nombre: '',
+      apellidos: '',
+      dni: '',
+      idEspecialidad: null
+    };
   }
 
   closeCreateModal(): void {
     this.isCreateModalOpen = false;
-    this.newExpert = { username: '', password: '', nombre: '', apellidos: '', dni: '' };
+  }
+
+  // Convierte el valor del select a número
+  convertIdEspecialidad(value: any): void {
+    this.newExpert.idEspecialidad = Number(value);
   }
 
   createExpert(): void {
-    const expertToCreate = { ...this.newExpert, role: 'experto' };
-    this.http.post<User>('http://localhost:8080/auth/register', expertToCreate).subscribe({
+    const expertToCreate = { 
+      ...this.newExpert, 
+      role: 'experto', 
+      especialidadId: this.newExpert.idEspecialidad // Renombramos la clave
+    };
+  
+    delete expertToCreate.idEspecialidad; // Eliminamos la clave incorrecta
+  
+    console.log("Datos a enviar:", expertToCreate);
+  
+    this.http.post<any>('http://localhost:8080/auth/register', expertToCreate).subscribe({
       next: (user) => {
         this.experts.push(user);
         this.closeCreateModal();
@@ -73,4 +106,5 @@ export class ExpertUsersComponent implements OnInit {
       }
     });
   }
+  
 }
