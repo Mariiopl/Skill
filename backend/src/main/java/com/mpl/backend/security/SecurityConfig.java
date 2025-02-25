@@ -25,8 +25,8 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationManager authManager(HttpSecurity http,
-                                             PasswordEncoder passwordEncoder,
-                                             UserDetailsService userDetailsService) throws Exception {
+                                               PasswordEncoder passwordEncoder,
+                                               UserDetailsService userDetailsService) throws Exception {
 
         return http.getSharedObject(AuthenticationManagerBuilder.class)
                 .userDetailsService(userDetailsService)
@@ -38,7 +38,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        http.csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        // Habilitamos CORS utilizando el bean definido
+        http.cors();
+
+        http.csrf().disable()
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.authorizeRequests(requests -> requests
                 .requestMatchers("/auth/**").permitAll()
@@ -49,12 +53,31 @@ public class SecurityConfig {
                 .requestMatchers("/evaluaciones/**").permitAll()
                 .requestMatchers("/evaluacion-items/**").permitAll()
                 .requestMatchers("/users/**").permitAll()
-                .anyRequest()
-                .authenticated());
+                .anyRequest().authenticated());
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
-
+    
+    // Define la configuración CORS
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        // Permite solicitudes desde http://localhost:4200
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+        // Permite los métodos que necesites
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        // Permite todos los encabezados
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        // Permite exponer el encabezado Authorization, por ejemplo
+        configuration.setExposedHeaders(Arrays.asList("Authorization"));
+        // Permite credenciales (cookies, etc.) si es necesario
+        configuration.setAllowCredentials(true);
+        
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        // Aplica la configuración a todas las rutas
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 }

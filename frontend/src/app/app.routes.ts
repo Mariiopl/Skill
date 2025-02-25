@@ -25,6 +25,7 @@ import { ExpertoComponent } from './experto/experto.component';
 import { ExpertosComponent } from './expertos/expertos.component';
 import { EspecialidadComponent } from './especialidad/especialidad.component';
 import { ListaParticipantesComponent } from './lista-participantes/lista-participantes.component';
+import { ExpertUsersComponent } from './expert-users/expert-users.component';
 
 export const routes: Routes = [
     { path: '', component: ListaParticipantesComponent, pathMatch: 'full' },
@@ -43,6 +44,7 @@ export const routes: Routes = [
             { path: 'expertos', component:ExpertosComponent ,canActivate: [guardAdminGuard] },
             { path: 'ganadores', component: AdminComponent, canActivate: [guardAdminGuard],pathMatch: 'full' },
             { path: 'especialidad', component:EspecialidadComponent,canActivate: [guardAdminGuard], pathMatch: 'full' },
+            { path: 'expert-users', component: ExpertUsersComponent, canActivate: [guardAdminGuard], pathMatch: 'full' },
            
         ]
     },

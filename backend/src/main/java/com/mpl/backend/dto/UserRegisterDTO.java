@@ -11,5 +11,5 @@ DTO con la información necesaria para registrar un nuevo usuario en base de dat
     "apellidos": "Week"     
 }
  */
-public record UserRegisterDTO(String username, String password,  String password2, String dni, String nombre, String apellidos) {   
+public record UserRegisterDTO(String username, String password,  String password2, String dni, String nombre, String apellidos, Long especialidadId) {   
 }
