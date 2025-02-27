@@ -1,6 +1,7 @@
 package com.mpl.backend.service;
 
 import com.mpl.backend.dto.EvaluacionDTO;
+import com.mpl.backend.dto.GanadorDTO;
 import com.mpl.backend.model.Evaluacion;
 import com.mpl.backend.model.Participante;
 import com.mpl.backend.model.Prueba;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class EvaluacionService {
@@ -41,7 +43,6 @@ public class EvaluacionService {
             .orElseThrow(() -> new RuntimeException("User no encontrado"));
 
         Evaluacion evaluacion = new Evaluacion();
-        evaluacion.setNotaFinal(evaluacionDTO.notaFinal());
         evaluacion.setParticipante(participante);
         evaluacion.setPrueba(prueba);
         evaluacion.setUser(user);
@@ -67,10 +68,24 @@ public class EvaluacionService {
     // Actualizar una evaluacion por ID
     public Evaluacion updateEvaluacion(EvaluacionDTO evaluacionDTO, Long id) {
         Evaluacion evaluacion = evaluacionRepository.findById(id).orElse(null);
-        evaluacion.setNotaFinal(evaluacionDTO.notaFinal());
+        evaluacion.setNotaFinal(null);
         evaluacion.setParticipante(participanteRepository.findById(evaluacionDTO.idParticipante()).orElse(null));
         evaluacion.setPrueba(pruebaRepository.findById(evaluacionDTO.idPrueba()).orElse(null));
         evaluacion.setUser(userRepository.findById(evaluacionDTO.idUser()).orElse(null));
+        evaluacion.setEstado(null);
         return evaluacionRepository.save(evaluacion);
+    }
+
+    // Obtener los ganadores
+    public List<GanadorDTO> getTopScorers() {
+        List<Evaluacion> evaluaciones = evaluacionRepository.findTopScorersByTest();
+        return evaluaciones.stream().map(e -> new GanadorDTO(
+            e.getIdEvaluacion(),
+            e.getNotaFinal(),
+            e.getParticipante().getNombre(),
+            e.getParticipante().getApellidos(),
+            e.getPrueba().getEnunciado(),
+            e.getParticipante().getEspecialidad().getNombre()
+        )).collect(Collectors.toList());
     }
 }

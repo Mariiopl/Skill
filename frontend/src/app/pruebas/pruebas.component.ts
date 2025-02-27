@@ -84,11 +84,16 @@ export class PruebasComponent implements OnInit {
   editPrueba(id: number): void {
     this.isEditMode = true; // Establecer el modo de edición
     const prueba = this.pruebas.find((prueba) => prueba.idPrueba === id);
-    if (prueba) {
-      this.newPrueba = { ...prueba }; // Rellenar los campos del formulario con los datos de la prueba
-      this.openCreateModal(); // Abrir el modal para editar la prueba
+    
+    if (!prueba) {
+      console.error(`No se encontró la prueba con ID ${id}`);
+      return;
     }
+  
+    this.newPrueba = { ...prueba }; // Copia los datos de la prueba
+    this.openCreateModal(); // Abre el modal para edición
   }
+  
 
   updatePrueba(id: number): void {
     this.http.put<any>(`http://localhost:8080/pruebas/${id}`, this.newPrueba).subscribe({

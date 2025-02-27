@@ -22,11 +22,10 @@ export class ListaParticipantesComponent implements OnInit {
   cargarParticipantes(): void {
     this.participanteService.getParticipantes().subscribe({
       next: (data) => {
-        console.log('Participantes cargados:', data);
         this.participantes = data;
       },
       error: (err) => {
-        console.error('Error al obtener participantes:', err);
+        console.error(err);
       }
     });
   }

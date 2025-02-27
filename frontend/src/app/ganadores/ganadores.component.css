@@ -1,0 +1,65 @@
+/* ====== Estilos Generales ====== */
+h2 {
+    text-align: center;
+    font-size: 1.8rem;
+    color: #333;
+    margin-bottom: 1rem;
+  }
+  
+  /* ====== Estilos de la Tabla ====== */
+  table {
+    width: 100%;
+    max-width: 900px;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  /* Encabezados */
+  th {
+    background: #007bff;
+    color: white;
+    text-transform: uppercase;
+    padding: 12px;
+    font-weight: bold;
+  }
+  
+  /* Filas */
+  td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  /* Filas alternas */
+  tr:nth-child(even) {
+    background: #f8f9fa;
+  }
+  
+  /* Efecto hover */
+  tr:hover {
+    background: #e9ecef;
+    transition: 0.3s;
+  }
+  
+  /* Resaltado de la mejor nota */
+  td:last-child {
+    font-weight: bold;
+    color: #28a745; /* Verde */
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    table {
+      width: 100%;
+      font-size: 0.9rem;
+    }
+  
+    th, td {
+      padding: 8px;
+    }
+  }
+  

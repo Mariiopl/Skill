@@ -1,6 +1,7 @@
 package com.mpl.backend.controller;
 
 import com.mpl.backend.dto.EvaluacionDTO;
+import com.mpl.backend.dto.GanadorDTO;
 import com.mpl.backend.model.Evaluacion;
 import com.mpl.backend.service.EvaluacionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,5 +48,9 @@ public class EvaluacionController {
     public ResponseEntity<Evaluacion> updateEvaluacion(@RequestBody EvaluacionDTO evaluacionDTO, @PathVariable Long id) {
         Evaluacion evaluacion = evaluacionService.updateEvaluacion(evaluacionDTO, id);
         return new ResponseEntity<>(evaluacion, HttpStatus.OK);
+    }
+    @GetMapping("/ganadores")
+    public List<GanadorDTO> getTopScorers() {
+        return evaluacionService.getTopScorers();
     }
 }

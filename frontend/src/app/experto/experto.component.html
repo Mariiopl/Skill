@@ -1,1 +1,23 @@
-<h3>Tu prima</h3>
+<!-- Listado de especialidades -->
+ <!-- Tabla de especialidades -->
+<h2>Listado de Especialidades</h2>
+
+<table *ngIf="especialidades.length > 0">
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Código</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let especialidad of especialidades">
+      <td>{{ especialidad.nombre }}</td>
+      <td>{{ especialidad.codigo }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Mensaje si no hay especialidades -->
+<div *ngIf="especialidades.length === 0">
+  No se encontraron especialidades.
+</div>

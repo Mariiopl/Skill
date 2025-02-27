@@ -16,6 +16,8 @@ export class ExpertUsersComponent implements OnInit {
   especialidades: any[] = [];
   error: string = '';
   isCreateModalOpen: boolean = false;
+  isEditModalOpen: boolean = false;
+  selectedExpert: any = {};
 
   // Objeto para crear un nuevo experto
   newExpert: any = {
@@ -38,7 +40,6 @@ export class ExpertUsersComponent implements OnInit {
   loadExperts(): void {
     this.http.get<any[]>('http://localhost:8080/users').subscribe({
       next: (data) => {
-        // Filtra solo los expertos
         this.experts = data.filter(user => user.role === 'experto');
       },
       error: (err) => {
@@ -52,7 +53,6 @@ export class ExpertUsersComponent implements OnInit {
     this.http.get<any[]>('http://localhost:8080/especialidad').subscribe({
       next: (data) => {
         this.especialidades = data;
-        console.log('Especialidades cargadas:', data);
       },
       error: (err) => {
         console.error(err);
@@ -63,7 +63,6 @@ export class ExpertUsersComponent implements OnInit {
 
   openCreateModal(): void {
     this.isCreateModalOpen = true;
-    // Reiniciar el formulario
     this.newExpert = {
       username: '',
       password: '',
@@ -79,22 +78,15 @@ export class ExpertUsersComponent implements OnInit {
     this.isCreateModalOpen = false;
   }
 
-  // Convierte el valor del select a número
-  convertIdEspecialidad(value: any): void {
-    this.newExpert.idEspecialidad = Number(value);
-  }
-
   createExpert(): void {
     const expertToCreate = { 
       ...this.newExpert, 
       role: 'experto', 
-      especialidadId: this.newExpert.idEspecialidad // Renombramos la clave
+      especialidadId: this.newExpert.idEspecialidad 
     };
-  
-    delete expertToCreate.idEspecialidad; // Eliminamos la clave incorrecta
-  
-    console.log("Datos a enviar:", expertToCreate);
-  
+
+    delete expertToCreate.idEspecialidad;
+
     this.http.post<any>('http://localhost:8080/auth/register', expertToCreate).subscribe({
       next: (user) => {
         this.experts.push(user);
@@ -106,5 +98,37 @@ export class ExpertUsersComponent implements OnInit {
       }
     });
   }
-  
+
+  // Abre el modal de edición con los datos del experto seleccionado
+  openEditModal(expert: any): void {
+    this.selectedExpert = { ...expert };
+    this.isEditModalOpen = true;
+  }
+
+  // Cierra el modal de edición
+  closeEditModal(): void {
+    this.isEditModalOpen = false;
+  }
+
+  // Envía los cambios del experto editado al backend
+  updateExpert(): void {
+    const updatedExpert = { 
+      ...this.selectedExpert, 
+      especialidadId: this.selectedExpert.idEspecialidad 
+    };
+
+    delete updatedExpert.idEspecialidad;
+
+    this.http.put<any>(`http://localhost:8080/users/${updatedExpert.id}`, updatedExpert).subscribe({
+      next: () => {
+        const index = this.experts.findIndex(e => e.id === updatedExpert.id);
+        if (index !== -1) this.experts[index] = updatedExpert;
+        this.closeEditModal();
+      },
+      error: (err) => {
+        console.error(err);
+        this.error = 'Error al actualizar el experto.';
+      }
+    });
+  }
 }

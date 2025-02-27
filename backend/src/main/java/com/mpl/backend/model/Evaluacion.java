@@ -16,6 +16,9 @@ public class Evaluacion {
 
     private Double notaFinal;
 
+    private String estado;
+ 
+
     @ManyToOne
     private Participante participante;
 
@@ -64,6 +67,14 @@ public class Evaluacion {
 
     public void setUser(User user) {
         this.user = user;
+    }
+    
+    public String getEstado() {
+        return estado;
+    }
+    
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 }
 

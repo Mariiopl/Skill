@@ -27,6 +27,8 @@ import { EspecialidadComponent } from './especialidad/especialidad.component';
 import { ListaParticipantesComponent } from './lista-participantes/lista-participantes.component';
 import { ExpertUsersComponent } from './expert-users/expert-users.component';
 import { PruebasComponent } from './pruebas/pruebas.component';
+import { EvaluacionesComponent } from './evaluaciones/evaluaciones.component';
+import { GanadoresComponent } from './ganadores/ganadores.component';
 
 export const routes: Routes = [
     { path: '', component: ListaParticipantesComponent, pathMatch: 'full' },
@@ -37,9 +39,11 @@ export const routes: Routes = [
 
     { path: 'experto',canActivate: [guardExpertoGuard],
         children: [
+            { path: '', redirectTo: 'experto', pathMatch: 'full' },
+            { path: 'experto', component: ExpertoComponent, pathMatch: 'full', canActivate: [guardExpertoGuard] },
             { path: 'lista-participantes', component: ListaParticipantesComponent, pathMatch: 'full',canActivate: [guardExpertoGuard] },
             { path: 'pruebas', component: PruebasComponent, pathMatch: 'full',canActivate: [guardExpertoGuard] },
-            { path: 'evaluaciones', component: ExpertoComponent, pathMatch: 'full',canActivate: [guardExpertoGuard] },
+            { path: 'evaluaciones', component: EvaluacionesComponent, pathMatch: 'full',canActivate: [guardExpertoGuard] },
            
         ]   
      },
@@ -47,7 +51,7 @@ export const routes: Routes = [
         children: [
             { path: '', redirectTo: 'expertos', pathMatch: 'full' },
             { path: 'expertos', component:ExpertosComponent ,canActivate: [guardAdminGuard] },
-            { path: 'ganadores', component: AdminComponent, canActivate: [guardAdminGuard],pathMatch: 'full' },
+            { path: 'ganadores', component: GanadoresComponent, canActivate: [guardAdminGuard],pathMatch: 'full' },
             { path: 'especialidad', component:EspecialidadComponent,canActivate: [guardAdminGuard], pathMatch: 'full' },
             { path: 'expert-users', component: ExpertUsersComponent, canActivate: [guardAdminGuard], pathMatch: 'full' },
            

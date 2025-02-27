@@ -1,0 +1,22 @@
+<h2>Ganadores de cada prueba</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Apellidos</th>
+      <th>Especialidad</th>
+      <th>Prueba</th>
+      <th>Nota Final</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let ganador of ganadores">
+      <td>{{ ganador.nombreParticipante }}</td>
+      <td>{{ ganador.apellidos }}</td>
+      <td>{{ ganador.nombreEspecialidad }}</td>
+      <td>{{ ganador.nombrePrueba }}</td>
+      <td>{{ ganador.notaFinal }}</td>
+    </tr>
+  </tbody>
+</table>

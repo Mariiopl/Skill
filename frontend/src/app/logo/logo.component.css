@@ -1,0 +1,19 @@
+/* Estilo para el header */
+header.navbar {
+    padding: 15px 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background: #212529; /* Un negro más moderno */
+  }
+  
+  /* Estilo para la marca (nombre) */
+  .navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #f8f9fa;
+    transition: color 0.3s ease-in-out;
+  }
+  
+  .navbar-brand:hover {
+    color: #ffc107; /* Amarillo dorado al pasar el cursor */
+  }
+  

@@ -1,0 +1,51 @@
+/* Estilos generales */
+h2 {
+    text-align: center;
+    font-size: 1.8rem;
+    color: #333;
+    margin-bottom: 1rem;
+  }
+  
+  /* Contenedor de la tabla */
+  .table {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    border-collapse: collapse;
+    background: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  /* Estilos para las celdas */
+  th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  th {
+    background: #007bff;
+    color: white;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+  
+  tr:nth-child(even) {
+    background: #f8f9fa;
+  }
+  
+  tr:hover {
+    background: #e9ecef;
+    transition: 0.3s;
+  }
+  
+  /* Mensaje cuando no hay participantes */
+  p {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #dc3545;
+    margin-top: 20px;
+  }
+  

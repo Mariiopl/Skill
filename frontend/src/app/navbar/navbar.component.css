@@ -1,0 +1,68 @@
+/* Navbar estilizado */
+.navbar {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 10px 20px;
+  }
+  
+  /* Estilo para los enlaces del navbar */
+  .navbar-nav .nav-link {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #f8f9fa;
+    transition: color 0.3s ease-in-out;
+  }
+  
+  .navbar-nav .nav-link:hover {
+    color: #ffc107; /* Amarillo */
+  }
+  
+  /* Estilos para los botones */
+  .btn-outline-danger,
+  .btn-outline-primary {
+    font-size: 0.9rem;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .btn-outline-danger:hover {
+    background: #dc3545;
+    color: white;
+  }
+  
+  .btn-outline-primary:hover {
+    background: #0d6efd;
+    color: white;
+  }
+  
+  /* Estilo del botón de hamburguesa */
+  .navbar-toggler {
+    border: none;
+    outline: none;
+  }
+  
+  .navbar-toggler:focus {
+    box-shadow: none;
+  }
+  
+  /* Texto de usuario */
+  .navbar-text {
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  
+  /* Responsive: centrar menú en dispositivos pequeños */
+  @media (max-width: 991px) {
+    .navbar-nav {
+      text-align: center;
+    }
+  
+    .navbar-text {
+      margin-bottom: 10px;
+    }
+  
+    .btn {
+      width: 100%;
+    }
+  }
+  

@@ -20,15 +20,24 @@
                 <li class="nav-item" *ngIf="isLogged() && getRole() === 'admin'">
                     <a class="nav-link" routerLink="/admin/expert-users">Gestionar Expertos</a>
                 </li>
+                <li class="nav-item" *ngIf="isLogged() && getRole() === 'admin'">
+                    <a class="nav-link" routerLink="/admin/ganadores">Ganadores</a>
+                </li>
                 <li class="nav-item" *ngIf="isLogged() && getRole() === 'experto'">
                     <a class="nav-link" routerLink="/experto/lista-participantes">Lista de participantes</a>
                 </li>
                 <li class="nav-item" *ngIf="isLogged() && getRole() === 'experto'">
                     <a class="nav-link" routerLink="/experto/pruebas">Pruebas</a>
                 </li>
+                <li class="nav-item" *ngIf="isLogged() && getRole() === 'experto'">
+                    <a class="nav-link" routerLink="/experto/evaluaciones">Evaluaciones</a>
+                </li>
+                <li class="nav-item" *ngIf="isLogged() && getRole() === 'experto'">
+                    <a class="nav-link" routerLink="/experto/experto">Listado de especialidades</a>
+                </li>
             </ul>
             <ul class="navbar-nav">
-                <p class="navbar-text text-light me-3" *ngIf="isLogged()">Bienvenido {{ getNombre() }}</p>
+                <p class="navbar-text text-light me-3" *ngIf="isLogged()">Has iniciado sesión como {{ getNombre() }}</p>
                 <li class="nav-item" *ngIf="isLogged()">
                     <button class="btn btn-outline-danger" (click)="logout()">Logout</button>
                 </li>
