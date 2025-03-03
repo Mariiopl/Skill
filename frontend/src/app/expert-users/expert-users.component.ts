@@ -17,9 +17,8 @@ export class ExpertUsersComponent implements OnInit {
   error: string = '';
   isCreateModalOpen: boolean = false;
   isEditModalOpen: boolean = false;
-  selectedExpert: any = {};
+  selectedExpert: any = {}; // Nuevo: Experto seleccionado para editar
 
-  // Objeto para crear un nuevo experto
   newExpert: any = {
     username: '',
     password: '',
@@ -78,50 +77,27 @@ export class ExpertUsersComponent implements OnInit {
     this.isCreateModalOpen = false;
   }
 
-  createExpert(): void {
-    const expertToCreate = { 
-      ...this.newExpert, 
-      role: 'experto', 
-      especialidadId: this.newExpert.idEspecialidad 
-    };
-
-    delete expertToCreate.idEspecialidad;
-
-    this.http.post<any>('http://localhost:8080/auth/register', expertToCreate).subscribe({
-      next: (user) => {
-        this.experts.push(user);
-        this.closeCreateModal();
-      },
-      error: (err) => {
-        console.error(err);
-        this.error = 'Error al crear el experto.';
-      }
-    });
-  }
-
-  // Abre el modal de edición con los datos del experto seleccionado
   openEditModal(expert: any): void {
-    this.selectedExpert = { ...expert };
+    this.selectedExpert = { ...expert }; // Clonar el objeto para evitar cambios en la tabla antes de guardar
+    this.selectedExpert.especialidadId = expert.especialidad?.idEspecialidad; // Extraer el id de especialidad
     this.isEditModalOpen = true;
   }
 
-  // Cierra el modal de edición
   closeEditModal(): void {
     this.isEditModalOpen = false;
   }
 
-  // Envía los cambios del experto editado al backend
   updateExpert(): void {
-    const updatedExpert = { 
-      ...this.selectedExpert, 
-      especialidadId: this.selectedExpert.idEspecialidad 
+    const expertToUpdate = {
+      ...this.selectedExpert,
+      especialidadId: this.selectedExpert.especialidadId
     };
 
-    delete updatedExpert.idEspecialidad;
+    delete expertToUpdate.especialidad; // Eliminamos la clave incorrecta para evitar conflictos
 
-    this.http.put<any>(`http://localhost:8080/users/${updatedExpert.id}`, updatedExpert).subscribe({
-      next: () => {
-        const index = this.experts.findIndex(e => e.id === updatedExpert.id);
+    this.http.put<any>(`http://localhost:8080/users/${this.selectedExpert.id}`, expertToUpdate).subscribe({
+      next: (updatedExpert) => {
+        const index = this.experts.findIndex(u => u.id === updatedExpert.id);
         if (index !== -1) this.experts[index] = updatedExpert;
         this.closeEditModal();
       },

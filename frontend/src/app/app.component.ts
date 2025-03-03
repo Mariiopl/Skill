@@ -4,10 +4,11 @@ import { LogoComponent } from './logo/logo.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from './navbar/navbar.component';
+import { FooterComponent } from './footer/footer.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, LogoComponent, CommonModule, FormsModule, NavbarComponent],
+  imports: [RouterOutlet, LogoComponent, CommonModule, FormsModule, NavbarComponent, FooterComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

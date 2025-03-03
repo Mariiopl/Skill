@@ -1,12 +1,3 @@
-<div *ngIf="error" class="alert alert-danger">
-  {{ error }}
-</div>
-
-<h2>Expertos Registrados</h2>
-
-<!-- Botón para abrir el formulario de creación de experto -->
-<button class="btn btn-primary mb-3" (click)="openCreateModal()">Crear Nuevo Experto</button>
-
 <table class="table" *ngIf="experts.length > 0">
   <thead>
     <tr>
@@ -14,7 +5,8 @@
       <th>Nombre</th>
       <th>Apellidos</th>
       <th>DNI</th>
-      <th>Acciones</th>
+      <th>Especialidad</th>
+      <th>Acciones</th> <!-- Nueva columna para acciones -->
     </tr>
   </thead>
   <tbody>
@@ -23,16 +15,13 @@
       <td>{{ expert.nombre }}</td>
       <td>{{ expert.apellidos }}</td>
       <td>{{ expert.dni }}</td>
+      <td>{{ expert.especialidad?.nombre }}</td>
       <td>
-        <button class="btn btn-warning btn-sm me-2" (click)="openEditModal(expert)">Editar</button>
+        <button class="btn btn-warning btn-sm" (click)="openEditModal(expert)">Editar</button>
       </td>
     </tr>
   </tbody>
 </table>
-
-<div *ngIf="experts.length === 0 && !error">
-  No hay expertos registrados.
-</div>
 
 <!-- Modal para editar experto -->
 <div class="modal" tabindex="-1" [ngClass]="{'show': isEditModalOpen}" [ngStyle]="{'display': isEditModalOpen ? 'block' : 'none'}">
@@ -45,26 +34,30 @@
       <div class="modal-body">
         <form (ngSubmit)="updateExpert()">
           <div class="mb-3">
+            <label for="editUsername" class="form-label">Username</label>
+            <input type="text" id="editUsername" [(ngModel)]="selectedExpert.username" name="username" class="form-control" required>
+          </div>
+          <div class="mb-3">
             <label for="editNombre" class="form-label">Nombre</label>
-            <input type="text" id="editNombre" [(ngModel)]="selectedExpert.nombre" name="editNombre" class="form-control" required>
+            <input type="text" id="editNombre" [(ngModel)]="selectedExpert.nombre" name="nombre" class="form-control" required>
           </div>
           <div class="mb-3">
             <label for="editApellidos" class="form-label">Apellidos</label>
-            <input type="text" id="editApellidos" [(ngModel)]="selectedExpert.apellidos" name="editApellidos" class="form-control" required>
+            <input type="text" id="editApellidos" [(ngModel)]="selectedExpert.apellidos" name="apellidos" class="form-control" required>
           </div>
           <div class="mb-3">
-            <label for="editDni" class="form-label">DNI</label>
-            <input type="text" id="editDni" [(ngModel)]="selectedExpert.dni" name="editDni" class="form-control" required>
+            <label for="editDNI" class="form-label">DNI</label>
+            <input type="text" id="editDNI" [(ngModel)]="selectedExpert.dni" name="dni" class="form-control" required>
           </div>
           <div class="mb-3">
-            <label for="editEspecialidad">Especialidad</label>
-            <select id="editEspecialidad" [(ngModel)]="selectedExpert.idEspecialidad" name="editEspecialidad" class="form-select" required>
+            <label for="editEspecialidad" class="form-label">Especialidad</label>
+            <select id="editEspecialidad" [(ngModel)]="selectedExpert.especialidadId" name="especialidadId" class="form-select" required>
               <option *ngFor="let especialidad of especialidades" [value]="especialidad.idEspecialidad">
                 {{ especialidad.nombre }}
               </option>
             </select>
           </div>
-          <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+          <button type="submit" class="btn btn-success">Guardar Cambios</button>
         </form>
       </div>
     </div>
