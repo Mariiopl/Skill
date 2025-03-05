@@ -24,13 +24,13 @@
                     <a class="nav-link" routerLink="/admin/ganadores">Ganadores</a>
                 </li>
                 <li class="nav-item" *ngIf="isLogged() && getRole() === 'experto'">
-                    <a class="nav-link" routerLink="/experto/lista-participantes">Lista de participantes</a>
+                    <a class="nav-link" routerLink="/experto/lista-participantes-id">Lista de participantes</a>
                 </li>
                 <li class="nav-item" *ngIf="isLogged() && getRole() === 'experto'">
                     <a class="nav-link" routerLink="/experto/pruebas">Pruebas</a>
                 </li>
                 <li class="nav-item" *ngIf="isLogged() && getRole() === 'experto'">
-                    <a class="nav-link" routerLink="/experto/evaluaciones">Evaluaciones</a>
+                    <a class="nav-link" routerLink="/experto/evaluacion">Evaluaciones</a>
                 </li>
                 <li class="nav-item" *ngIf="isLogged() && getRole() === 'experto'">
                     <a class="nav-link" routerLink="/experto/experto">Listado de especialidades</a>

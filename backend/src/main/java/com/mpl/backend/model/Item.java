@@ -1,6 +1,8 @@
 package com.mpl.backend.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
@@ -19,6 +21,7 @@ public class Item {
     private Integer gradosConsecuion;
 
     @ManyToOne
+    @JsonIgnore
     private Prueba prueba;
 
     // Getters and Setters
