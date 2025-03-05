@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, NgIf, NgForOf } from '@angular/common';
 import { ParticipanteService, Participante } from '../services/participante.service';
-import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-lista-participantes',
   standalone: true,
-  imports: [CommonModule, NgIf, NgForOf, RouterLink],
+  imports: [CommonModule, NgIf, NgForOf],
   templateUrl: './lista-participantes.component.html',
   styleUrls: ['./lista-participantes.component.css']
 })

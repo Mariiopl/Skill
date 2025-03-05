@@ -2,12 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-expert-users',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule],
   templateUrl: './expert-users.component.html',
   styleUrls: ['./expert-users.component.css']
 })
@@ -76,6 +75,34 @@ export class ExpertUsersComponent implements OnInit {
   closeCreateModal(): void {
     this.isCreateModalOpen = false;
   }
+
+ // Convierte el valor del select a número
+ convertIdEspecialidad(value: any): void {
+  this.newExpert.idEspecialidad = Number(value);
+}
+
+createExpert(): void {
+  const expertToCreate = { 
+    ...this.newExpert, 
+    role: 'experto', 
+    especialidadId: this.newExpert.idEspecialidad // Renombramos la clave
+  };
+
+  delete expertToCreate.idEspecialidad; // Eliminamos la clave incorrecta
+
+  console.log("Datos a enviar:", expertToCreate);
+
+  this.http.post<any>('http://localhost:8080/auth/register', expertToCreate).subscribe({
+    next: (user) => {
+      this.experts.push(user);
+      this.closeCreateModal();
+    },
+    error: (err) => {
+      console.error(err);
+      this.error = 'Error al crear el experto.';
+    }
+  });
+}
 
   openEditModal(expert: any): void {
     this.selectedExpert = { ...expert }; // Clonar el objeto para evitar cambios en la tabla antes de guardar

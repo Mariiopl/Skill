@@ -1,37 +1,32 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-pruebas',
-  standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './pruebas.component.html',
-  styleUrls: ['./pruebas.component.css']
+  imports: [FormsModule, CommonModule],
+  styleUrls: ['./pruebas.component.css'],
 })
 export class PruebasComponent implements OnInit {
-  pruebas: any[] = []; // Array de pruebas
-  especialidades: any[] = []; // Array de especialidades
-  newPrueba: any = {
-    enunciado: '',
-    puntuacionMaxima: null,
-    especialidadId: null
-  };
+  pruebas: any[] = [];
+  especialidades: any[] = [];
+  items: any[] = []; // Aquí se almacenarán los items disponibles
+  newPrueba: any = { enunciado: '', puntuacionMaxima: 0, idEspecialidad: '' };
   error: string = '';
-  isCreateModalOpen: boolean = false; // Variable para el modal de creación
-  isEditModalOpen: boolean = false; // Variable para el modal de edición
-  isEditMode: boolean = false; // Variable para saber si estamos en modo edición
+  isCreateModalOpen: boolean = false;
+  isEditModalOpen: boolean = false;
 
   constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
     this.loadPruebas();
     this.loadEspecialidades();
+    this.loadItems(); // Cargar los items existentes al inicializar
   }
 
+  // Método para cargar las pruebas desde la API
   loadPruebas(): void {
     this.http.get<any[]>('http://localhost:8080/pruebas/todos').subscribe({
       next: (data) => {
@@ -40,10 +35,11 @@ export class PruebasComponent implements OnInit {
       error: (err) => {
         console.error(err);
         this.error = 'Error al cargar las pruebas.';
-      }
+      },
     });
   }
 
+  // Método para cargar las especialidades desde la API
   loadEspecialidades(): void {
     this.http.get<any[]>('http://localhost:8080/especialidad').subscribe({
       next: (data) => {
@@ -52,93 +48,173 @@ export class PruebasComponent implements OnInit {
       error: (err) => {
         console.error(err);
         this.error = 'Error al cargar las especialidades.';
-      }
+      },
     });
   }
 
-  // Abrir el modal para crear una nueva prueba
+  // Método para cargar los items desde la API
+  loadItems(): void {
+    this.http.get<any[]>('http://localhost:8080/items').subscribe({
+      next: (data) => {
+        this.items = data; // Asignar los items a la variable 'items'
+      },
+      error: (err) => {
+        console.error(err);
+        this.error = 'Error al cargar los items.';
+      },
+    });
+  }
+
+  // Método para abrir el modal de creación de prueba
   openCreateModal(): void {
     this.isCreateModalOpen = true;
-    this.isEditMode = false;
-    this.newPrueba = { enunciado: '', puntuacionMaxima: null, especialidadId: null }; // Limpiar los campos
   }
 
-  // Abrir el modal para editar una prueba existente
-  openEditModal(): void {
-    this.isEditModalOpen = true;
-    this.isEditMode = true;
-  }
-
-  // Cerrar el modal de creación
+  // Método para cerrar el modal de creación de prueba
   closeCreateModal(): void {
     this.isCreateModalOpen = false;
   }
 
-  // Cerrar el modal de edición
+  // Método para crear una nueva prueba
+  createPrueba(): void {
+    if (
+      !this.newPrueba.enunciado ||
+      !this.newPrueba.puntuacionMaxima ||
+      !this.newPrueba.idEspecialidad
+    ) {
+      this.error = 'Por favor, complete todos los campos.';
+      return;
+    }
+
+    this.http
+      .post('http://localhost:8080/pruebas/crear', this.newPrueba)
+      .subscribe({
+        next: () => {
+          this.loadPruebas(); // Recargar la lista de pruebas
+          this.closeCreateModal(); // Cerrar el modal
+        },
+        error: (err) => {
+          console.error(err);
+          this.error = 'Error al crear la prueba.';
+        },
+      });
+  }
+
+  // Método para asociar un item a una prueba
+  // Eliminar la variable global `selectedItemId`
+  // selectedItemId: number | null = null;  // Ya no es necesario
+
+  addItemToPrueba(prueba: any): void {
+    if (!prueba.selectedItemId) {
+      alert('Selecciona un item antes de asociarlo.');
+      return;
+    }
+
+    const itemSeleccionado = this.items.find(
+      (item) => item.idItem === prueba.selectedItemId
+    );
+    if (!itemSeleccionado) {
+      alert('Item no encontrado.');
+      return;
+    }
+
+    const payload = [itemSeleccionado]; // Aquí estás enviando el item seleccionado en un arreglo.
+    this.http
+      .post(
+        `http://localhost:8080/pruebas/${prueba.idPrueba}/agregar-items`,
+        payload,
+        {
+          headers: { 'Content-Type': 'application/json' },
+        }
+      )
+      .subscribe({
+        next: () => {
+          console.log('Item asociado correctamente');
+        },
+        error: (err) => {
+          console.error('Error en la asociación', err);
+          alert('Error en la asociación, revisa la consola del navegador.');
+        },
+      });
+  }
+
+  // Método para editar una prueba
+  editPrueba(idPrueba: number): void {
+    this.http.get<any>(`http://localhost:8080/pruebas/${idPrueba}`).subscribe({
+      next: (data) => {
+        this.newPrueba = data;
+        this.isEditModalOpen = true;
+      },
+      error: (err) => {
+        console.error(err);
+        this.error = 'Error al cargar la prueba para editar.';
+      },
+    });
+  }
+
+  // Método para cerrar el modal de edición de prueba
   closeEditModal(): void {
     this.isEditModalOpen = false;
   }
 
-  // Crear una nueva prueba
-  createPrueba(): void {
-    this.http.post<any>('http://localhost:8080/pruebas/crear', this.newPrueba).subscribe({
-      next: (data) => {
-        this.pruebas.push(data);
-        this.closeCreateModal();
-      },
-      error: (err) => {
-        console.error(err);
-        this.error = 'Error al crear la prueba.';
-      }
-    });
-  }
-
-  // Editar una prueba existente
-  editPrueba(id: number): void {
-    this.isEditMode = true; // Establecer el modo de edición
-    const prueba = this.pruebas.find((prueba) => prueba.idPrueba === id);
-  
-    if (!prueba) {
-      console.error(`No se encontró la prueba con ID ${id}`);
+  // Método para actualizar una prueba
+  updatePrueba(idPrueba: number): void {
+    if (
+      !this.newPrueba.enunciado ||
+      !this.newPrueba.puntuacionMaxima ||
+      !this.newPrueba.idEspecialidad
+    ) {
+      this.error = 'Por favor, complete todos los campos.';
       return;
     }
-  
-    // Asignar correctamente los valores de la prueba al formulario de edición
-    this.newPrueba = { ...prueba }; // Copiar los datos de la prueba
-    this.newPrueba.idEspecialidad = prueba.especialidad.idEspecialidad; // Asignar correctamente la especialidad seleccionada
-    
-    // Abrir el modal de edición
-    this.openEditModal();
-  }
-  
 
-  // Actualizar una prueba existente
-  updatePrueba(id: number): void {
-    this.http.put<any>(`http://localhost:8080/pruebas/${id}`, this.newPrueba).subscribe({
-      next: (data) => {
-        const index = this.pruebas.findIndex((prueba) => prueba.idPrueba === id);
-        if (index !== -1) {
-          this.pruebas[index] = data;
-        }
-        this.closeEditModal();
-      },
-      error: (err) => {
-        console.error(err);
-        this.error = 'Error al actualizar la prueba.';
-      }
-    });
+    this.http
+      .put(`http://localhost:8080/pruebas/${idPrueba}`, this.newPrueba)
+      .subscribe({
+        next: () => {
+          this.loadPruebas(); // Recargar la lista de pruebas
+          this.closeEditModal(); // Cerrar el modal
+        },
+        error: (err) => {
+          console.error(err);
+          this.error = 'Error al actualizar la prueba.';
+        },
+      });
   }
 
-  // Eliminar una prueba
-  deletePrueba(id: number): void {
-    this.http.delete(`http://localhost:8080/pruebas/${id}`).subscribe({
+  // Método para eliminar una prueba
+  deletePrueba(idPrueba: number): void {
+    this.http.delete(`http://localhost:8080/pruebas/${idPrueba}`).subscribe({
       next: () => {
-        this.pruebas = this.pruebas.filter((prueba) => prueba.idPrueba !== id);
+        this.loadPruebas(); // Recargar la lista de pruebas
       },
       error: (err) => {
         console.error(err);
-        this.error = 'Esta prueba pertenece a alguna prueba de evaluación. No se puede eliminar.';
-      }
+        this.error = 'Error al eliminar la prueba.';
+      },
     });
+  }
+
+  // Método para subir un archivo PDF
+  uploadPdf(event: any, idPrueba: number): void {
+    const file = event.target.files[0];
+    if (!file) {
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', file, file.name);
+
+    this.http
+      .post(`http://localhost:8080/pruebas/${idPrueba}/upload-pdf`, formData)
+      .subscribe({
+        next: () => {
+          alert('Archivo PDF subido correctamente');
+        },
+        error: (err) => {
+          console.error(err);
+          this.error = 'Error al subir el archivo PDF.';
+        },
+      });
   }
 }

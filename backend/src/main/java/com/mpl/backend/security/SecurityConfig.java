@@ -54,6 +54,12 @@ public class SecurityConfig {
                 .requestMatchers("/evaluaciones/**").permitAll()
                 .requestMatchers("/evaluacion-items/**").permitAll()
                 .requestMatchers("/users/**").permitAll()
+                // Permitir acceso a Swagger y OpenAPI
+                .requestMatchers("/swagger-ui.html").permitAll()
+                .requestMatchers("/v3/api-docs/**").permitAll()
+                .requestMatchers("/swagger-ui/**").permitAll()
+                .requestMatchers("/swagger-resources/**").permitAll()
+                .requestMatchers("/webjars/**").permitAll()
                 .anyRequest().authenticated());
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
