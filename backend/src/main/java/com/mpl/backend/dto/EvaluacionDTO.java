@@ -6,6 +6,6 @@ package com.mpl.backend.dto;
 //     "idUser": 1
 //   }
   
-public record EvaluacionDTO(Long idParticipante, Long idPrueba, Long idUser) {
+public record EvaluacionDTO(Long idParticipante, Long idPrueba, Long idUser, Double notaFinal, String estado) {
 
 }

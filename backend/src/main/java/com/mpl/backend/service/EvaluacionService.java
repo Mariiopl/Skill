@@ -34,21 +34,24 @@ public class EvaluacionService {
     // Crear una nueva Evaluacion
     public Evaluacion crearEvaluacion(EvaluacionDTO evaluacionDTO) {
         Participante participante = participanteRepository.findById(evaluacionDTO.idParticipante())
-            .orElseThrow(() -> new RuntimeException("Participante no encontrado"));
-
+                .orElseThrow(() -> new RuntimeException("Participante no encontrado"));
+        
         Prueba prueba = pruebaRepository.findById(evaluacionDTO.idPrueba())
-            .orElseThrow(() -> new RuntimeException("Prueba no encontrada"));
-
+                .orElseThrow(() -> new RuntimeException("Prueba no encontrada"));
+        
         User user = userRepository.findById(evaluacionDTO.idUser())
-            .orElseThrow(() -> new RuntimeException("User no encontrado"));
-
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+    
         Evaluacion evaluacion = new Evaluacion();
         evaluacion.setParticipante(participante);
         evaluacion.setPrueba(prueba);
         evaluacion.setUser(user);
-
+        evaluacion.setNotaFinal(evaluacionDTO.notaFinal());  // Mapeo de notaFinal
+        evaluacion.setEstado(evaluacionDTO.estado());        // Mapeo de estado
+    
         return evaluacionRepository.save(evaluacion);
     }
+    
 
     // Obtener todas las evaluaciones
     public List<Evaluacion> findAll() {
@@ -87,5 +90,9 @@ public class EvaluacionService {
             e.getPrueba().getEnunciado(),
             e.getParticipante().getEspecialidad().getNombre()
         )).collect(Collectors.toList());
+    }
+    // Este método maneja tanto crear como actualizar
+    public Evaluacion save(Evaluacion evaluacion) {
+        return evaluacionRepository.save(evaluacion);
     }
 }

@@ -72,13 +72,19 @@ export class EvaluacionComponent implements OnInit {
       item: { idItem: item.idItem },
       valoracion: this.valoraciones[item.idItem] || 0
     }));
-
+  
+    // Verifica si notaFinal es nulo o vacío
+    if (this.notaFinal === null || this.notaFinal === undefined) {
+      console.error('Nota final no válida:', this.notaFinal);
+      return;
+    }
+  
     const evaluacionData = {
       idEvaluacion: this.evaluacionSeleccionada.idEvaluacion,
-      notaFinal: this.notaFinal,
+      notaFinal: this.notaFinal, // Asegúrate de que aquí esté asignada
       evaluacionItems: evaluacionItems
     };
-
+  
     this.http.put(`http://localhost:8080/evaluaciones/${this.evaluacionSeleccionada.idEvaluacion}`, evaluacionData)
       .subscribe(response => {
         console.log('Evaluación guardada con éxito', response);
@@ -87,4 +93,5 @@ export class EvaluacionComponent implements OnInit {
         console.error('Error al guardar la evaluación:', error);
       });
   }
+  
 }

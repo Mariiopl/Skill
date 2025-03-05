@@ -46,9 +46,20 @@ public class EvaluacionController {
     // Actualizar una evaluacion por ID
     @PutMapping("/{id}")
     public ResponseEntity<Evaluacion> updateEvaluacion(@RequestBody EvaluacionDTO evaluacionDTO, @PathVariable Long id) {
-        Evaluacion evaluacion = evaluacionService.updateEvaluacion(evaluacionDTO, id);
+        // Obtener la evaluación existente
+        Evaluacion evaluacion = evaluacionService.getById(id);
+        
+        // Actualizar los campos, asegúrate de que notaFinal no sea null
+        if (evaluacionDTO.notaFinal() != null) {
+            evaluacion.setNotaFinal(evaluacionDTO.notaFinal());
+        }
+        
+        // Actualizar otros campos si es necesario
+        evaluacionService.save(evaluacion);
+        
         return new ResponseEntity<>(evaluacion, HttpStatus.OK);
     }
+    
     @GetMapping("/ganadores")
     public List<GanadorDTO> getTopScorers() {
         return evaluacionService.getTopScorers();
