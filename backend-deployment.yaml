@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: skills-backend
+spec:
+  replicas: 2  # Número de réplicas del backend
+  selector:
+    matchLabels:
+      app: skills-backend
+  template:
+    metadata:
+      labels:
+        app: skills-backend
+    spec:
+      containers:
+      - name: skills-backend
+        image: mariopl25/skills-backend:latest
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "200m"
+            memory: "256Mi"
+        env:
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:mysql://skills-db:3306/competicion
+        - name: SPRING_DATASOURCE_USERNAME
+          value: root
+        - name: SPRING_DATASOURCE_PASSWORD
+          value: root

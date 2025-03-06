@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: skills-db
+spec:
+  replicas: 1  # Solo una réplica para la base de datos
+  selector:
+    matchLabels:
+      app: skills-db
+  template:
+    metadata:
+      labels:
+        app: skills-db
+    spec:
+      containers:
+      - name: skills-db
+        image: mariopl25/skills-db:latest
+        ports:
+        - containerPort: 3306  # Puerto de MySQL
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: root
+        - name: MYSQL_DATABASE
+          value: skills
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "200m"
+            memory: "256Mi"

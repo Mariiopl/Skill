@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name:  skills-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: www.andaluciaskills.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: skills-frontend
+            port:
+              number: 4200
+      - path: /api
+        pathType: Prefix
+        backend:
+          service:
+            name: skills-backend
+            port:
+              number: 8080

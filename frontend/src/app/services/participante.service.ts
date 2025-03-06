@@ -32,5 +32,9 @@ export class ParticipanteService {
   getParticipanteById(id: number): Observable<Participante> {
     return this.http.get<Participante>(`${this.apiUrl}/${id}`);
   }
+  getParticipantesEspecialidad(especialidadId: number) {
+    return this.http.get<any[]>(`/api/participantes/especialidad/${especialidadId}`);
+  }
+  
 
 }

@@ -1,31 +1,29 @@
-version: '3.8'
 services:
   backend:
-    build: ./backend
+    image: mariopl25/skills-backend:latest
+    container_name: skills-backend-container
     ports:
       - "8080:8080"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/mi-db
-      - SPRING_DATASOURCE_USERNAME=usuario
-      - SPRING_DATASOURCE_PASSWORD=contraseña
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/competicion
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
     depends_on:
       - db
 
   frontend:
-    build: ./frontend
+    image: mariopl25/skills-frontend:latest
+    container_name: skills-frontend-container
     ports:
-      - "80:80"
-    depends_on:
-      - backend
+      - "4200:4200"
 
   db:
-    image: postgres:13
+    image: mariopl25/skills-db:latest
+    container_name: skills-db-container
     environment:
-      POSTGRES_USER: usuario
-      POSTGRES_PASSWORD: contraseña
-      POSTGRES_DB: mi-db
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-
-volumes:
-  postgres_data:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: demo
+    ports:
+      - "3306:3306"
+    # volumes:
+    #   - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
