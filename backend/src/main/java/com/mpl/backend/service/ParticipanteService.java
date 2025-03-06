@@ -55,4 +55,5 @@ public class ParticipanteService {
         participante.setEspecialidad(especialidadRepository.findById(participanteDTO.idEspecialidad()).orElse(null));
         return participanteRepository.save(participante);
     }
+    
 }

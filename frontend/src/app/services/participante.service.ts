@@ -25,16 +25,15 @@ export class ParticipanteService {
   constructor(private http: HttpClient) { }
 
   getParticipantes(): Observable<Participante[]> {
-    console.log('Llamada a: ', `${this.apiUrl}/todos`);
     return this.http.get<Participante[]>(`${this.apiUrl}/todos`);
   }
-  
+
   getParticipanteById(id: number): Observable<Participante> {
     return this.http.get<Participante>(`${this.apiUrl}/${id}`);
   }
-  getParticipantesEspecialidad(especialidadId: number) {
-    return this.http.get<any[]>(`/api/participantes/especialidad/${especialidadId}`);
+
+  getParticipantesEspecialidad(idEspecialidad: number): Observable<Participante[]> {
+    return this.http.get<Participante[]>(`${this.apiUrl}/especialidad/${idEspecialidad}`);
   }
   
-
 }

@@ -7,6 +7,7 @@ interface LoginResponse {
   username: string;
   role: string;
   token: string;
+  especialidadId: number;
 }
 
 @Injectable({
@@ -16,6 +17,7 @@ export class AuthService {
 
   private apiUrl = 'http://localhost:8080/auth/login';
   private tokenKey = 'auth_token';
+  private userKey = 'user';
 
   constructor(private http: HttpClient) { }
 
@@ -23,6 +25,7 @@ export class AuthService {
     return this.http.post<LoginResponse>(this.apiUrl, { username, password }).pipe(
       map(response => {
         localStorage.setItem(this.tokenKey, response.token);
+        localStorage.setItem(this.userKey, JSON.stringify({ username: response.username, especialidadId: response.especialidadId }));
         return true;
       }),
       catchError(err => {
@@ -34,6 +37,7 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem(this.tokenKey);
+    localStorage.removeItem(this.userKey);
   }
 
   isAuthenticated(): boolean {
@@ -42,5 +46,10 @@ export class AuthService {
 
   getToken(): string | null {
     return localStorage.getItem(this.tokenKey);
+  }
+
+  getUserEspecialidadId(): number | null {
+    const user = JSON.parse(localStorage.getItem(this.userKey) || '{}');
+    return user?.especialidadId || null;
   }
 }

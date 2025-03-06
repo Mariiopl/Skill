@@ -1,1 +1,26 @@
-<p>lista-participantes-id works!</p>
+<h2>Listado de Participantes por Especialidad</h2>
+
+<div *ngIf="participantes.length > 0; else noData">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Apellidos</th>
+        <th>Centro</th>
+        <th>Especialidad</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let participante of participantes">
+        <td>{{ participante.nombre }}</td>
+        <td>{{ participante.apellidos }}</td>
+        <td>{{ participante.centro }}</td>
+        <td>{{ participante.especialidad?.nombre }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<ng-template #noData>
+  <p>No hay participantes disponibles.</p>
+</ng-template>

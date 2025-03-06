@@ -25,6 +25,7 @@ import { ExpertoComponent } from './experto/experto.component';
 import { ExpertosComponent } from './expertos/expertos.component';
 import { EspecialidadComponent } from './especialidad/especialidad.component';
 import { ListaParticipantesComponent } from './lista-participantes/lista-participantes.component';
+import { ListaParticipantesIdComponent } from './lista-participantes-id/lista-participantes-id.component';
 import { ExpertUsersComponent } from './expert-users/expert-users.component';
 import { PruebasComponent } from './pruebas/pruebas.component';
 import { EvaluacionComponent } from './evaluacion/evaluacion.component';
@@ -42,6 +43,7 @@ export const routes: Routes = [
             { path: '', redirectTo: 'experto', pathMatch: 'full' },
             { path: 'experto', component: ExpertoComponent, pathMatch: 'full', canActivate: [guardExpertoGuard] },
             { path: 'lista-participantes', component: ListaParticipantesComponent, pathMatch: 'full',canActivate: [guardExpertoGuard] },
+            { path: 'lista-participantes-id', component: ListaParticipantesIdComponent, pathMatch: 'full', canActivate: [guardExpertoGuard] },           
             { path: 'pruebas', component: PruebasComponent, pathMatch: 'full',canActivate: [guardExpertoGuard] },
             { path: 'evaluacion', component: EvaluacionComponent, pathMatch: 'full', canActivate: [guardExpertoGuard] },
 
