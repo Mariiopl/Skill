@@ -97,33 +97,12 @@ public class PruebaController {
     }
     @PostMapping("/{idPrueba}/agregar-items")
     public ResponseEntity<String> addItemsToPrueba(@PathVariable Long idPrueba, @RequestBody List<Item> items) {
-        System.out.println("📌 ID de la prueba: " + idPrueba);
-        System.out.println("📌 Items recibidos: " + items);
-    
-        for (Item item : items) {
-            System.out.println("🔎 Buscando item con ID: " + item.getIdItem());
-    
-            // Verificar si realmente está llegando el ID
-            if (item.getIdItem() == null) {
-                System.out.println("❌ El ID del item es NULL. Algo está mal en la petición.");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ID del item es NULL.");
-            }
-    
-            // Buscar el item en la BD
-            Item foundItem = itemRepository.findById(item.getIdItem()).orElse(null);
-    
-            if (foundItem == null) {
-                System.out.println("❌ Item NO encontrado en la BD: " + item.getIdItem());
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Item no encontrado: " + item.getIdItem());
-            }
-    
-            System.out.println("✅ Item encontrado en la BD: " + foundItem.getDescripcion());
-    
-            foundItem.setPrueba(pruebaRepository.findById(idPrueba).orElse(null));
-            itemRepository.save(foundItem);
+        try {
+            pruebaService.addItemsToPrueba(idPrueba, items);
+            return ResponseEntity.ok("Ítems asociados correctamente");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al asociar ítems: " + e.getMessage());
         }
-    
-        return ResponseEntity.ok("✅ Items asociados correctamente");
     }
     
     

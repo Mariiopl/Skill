@@ -24,6 +24,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -39,12 +40,6 @@ public class AuthController {
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
-    /**
-     * Endpoint para registrar un nuevo usuario en el sistema.
-     * 
-     * @param userDTO Información del usuario a registrar.
-     * @return Usuario creado con éxito.
-     */
     @Operation(
         summary = "Registrar un nuevo usuario",
         description = "Registra un nuevo usuario en el sistema y devuelve los datos del usuario creado.",
@@ -52,33 +47,47 @@ public class AuthController {
             description = "Datos del usuario a registrar",
             required = true,
             content = @Content(
+                mediaType = "application/json",
                 examples = @ExampleObject(
-                    value = "{\"username\": \"nuevo_experto\", \"password\": \"claveSegura123\", \"password2\": \"claveSegura123\", \"dni\": \"12345678Z\", \"nombre\": \"Carlos\", \"apellidos\": \"Fernández\", \"especialidadId\": 2}"
+                    name = "Ejemplo de Registro",
+                    value = "{\n" +
+                            "    \"username\": \"user6\",\n" +
+                            "    \"password\": \"admin\",\n" +
+                            "    \"password2\": \"admin\",\n" +
+                            "    \"dni\": \"12345347W\",\n" +
+                            "    \"nombre\": \"John\",\n" +
+                            "    \"apellidos\": \"Week\"\n" +
+                            "}"
                 )
             )
         )
     )
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Usuario registrado con éxito",
+        @ApiResponse(responseCode = "201", description = "Usuario registrado con éxito",
             content = @Content(
+                mediaType = "application/json",
                 examples = @ExampleObject(
-                    value = "{ \"id\": 1, \"username\": \"nuevo_experto\", \"role\": \"USER\", \"especialidad\": { \"idEspecialidad\": 2, \"nombre\": \"Administración de Sistemas\" }}"
+                    name = "Ejemplo de Respuesta",
+                    value = "{\n" +
+                            "    \"id\": 1,\n" +
+                            "    \"username\": \"user6\",\n" +
+                            "    \"role\": \"USER\",\n" +
+                            "    \"especialidad\": {\n" +
+                            "        \"idEspecialidad\": 2,\n" +
+                            "        \"nombre\": \"Administración de Sistemas\"\n" +
+                            "    }\n" +
+                            "}"
                 )
             )
         ),
-        @ApiResponse(responseCode = "400", description = "Solicitud inválida")
+        @ApiResponse(responseCode = "400", description = "Solicitud inválida - Datos incorrectos o usuario ya registrado"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
     @PostMapping("/auth/register")
     public User save(@RequestBody UserRegisterDTO userDTO) {
         return this.userService.save(userDTO);
     }
 
-    /**
-     * Endpoint para iniciar sesión y obtener un token JWT.
-     * 
-     * @param loginDTO Credenciales de inicio de sesión.
-     * @return Respuesta con el token JWT y detalles del usuario.
-     */
     @Operation(
         summary = "Iniciar sesión",
         description = "Permite a un usuario autenticarse y obtener un token JWT.",
@@ -86,22 +95,24 @@ public class AuthController {
             description = "Credenciales de inicio de sesión",
             required = true,
             content = @Content(
+                schema = @Schema(implementation = LoginRequest.class),
                 examples = @ExampleObject(
-                    value = "{\"username\": \"carlos_fernandez\", \"password\": \"MiPasswordSegura!\"}"
-                )
-            )
-        )
-    )
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Inicio de sesión exitoso",
-            content = @Content(
-                examples = @ExampleObject(
-                    value = "{ \"username\": \"carlos_fernandez\", \"role\": \"ADMIN\", \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\", \"especialidadId\": 2 }"
+                    value = "{\"username\": \"mario\", \"password\": \"admin\"}"
                 )
             )
         ),
-        @ApiResponse(responseCode = "401", description = "Credenciales inválidas")
-    })
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Inicio de sesión exitoso",
+                content = @Content(
+                    schema = @Schema(implementation = LoginResponse.class),
+                    examples = @ExampleObject(
+                        value = "{ \"username\": \"mario\", \"role\": \"ADMIN\", \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\", \"especialidadId\": 2 }"
+                    )
+                )
+            ),
+            @ApiResponse(responseCode = "401", description = "Credenciales inválidas")
+        }
+    )
     @PostMapping("/auth/login")
     public LoginResponse login(@RequestBody LoginRequest loginDTO) {
         Authentication authDTO = new UsernamePasswordAuthenticationToken(loginDTO.username(), loginDTO.password());
@@ -113,24 +124,18 @@ public class AuthController {
         return new LoginResponse(user.getUsername(), user.getRole(), token, user.getEspecialidad().getIdEspecialidad());
     }
 
-    /**
-     * Endpoint para cerrar sesión.
-     * 
-     * @param token Token JWT de autenticación.
-     * @return Mensaje de confirmación de cierre de sesión.
-     */
     @Operation(
         summary = "Cerrar sesión",
-        description = "Finaliza la sesión del usuario (solo respuesta de confirmación, el backend no almacena sesiones)."
+        description = "Finaliza la sesión del usuario (solo respuesta de confirmación, el backend no almacena sesiones).",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Cierre de sesión exitoso",
+                content = @Content(
+                    examples = @ExampleObject(value = "{ \"message\": \"Logout exitoso\" }")
+                )
+            ),
+            @ApiResponse(responseCode = "400", description = "Solicitud inválida")
+        }
     )
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Cierre de sesión exitoso",
-            content = @Content(
-                examples = @ExampleObject(value = "{ \"message\": \"Logout exitoso\" }")
-            )
-        ),
-        @ApiResponse(responseCode = "400", description = "Solicitud inválida")
-    })
     @PostMapping("/auth/logout")
     public ResponseEntity<Map<String, String>> logout(
         @RequestHeader("Authorization") 
