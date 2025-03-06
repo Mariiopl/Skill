@@ -11,7 +11,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
-
+import lombok.Getter;
+import lombok.Setter;
+@Getter
+@Setter
 @Entity
 public class Prueba {
 
@@ -21,6 +24,7 @@ public class Prueba {
 
     private String enunciado;
     private Integer puntuacionMaxima;
+    private String ruta; // Campo para almacenar la ruta del PDF
 
     @ManyToOne
     private Especialidad especialidad;

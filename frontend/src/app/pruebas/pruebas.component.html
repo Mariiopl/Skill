@@ -2,7 +2,7 @@
   {{ error }}
 </div>
 
-<h2>Lista de Pruebas</h2>
+<h2>Lista de Pruebasssss</h2>
 
 <!-- Botón para abrir el formulario de creación de prueba -->
 <button class="btn btn-primary mb-3" (click)="openCreateModal()">Crear Nueva Prueba</button>
@@ -24,7 +24,9 @@
     <td>{{ prueba.puntuacionMaxima }}</td>
     <td>{{ prueba.especialidad.nombre }}</td>
     <td>
-      <input type="file" (change)="uploadPdf($event, prueba.idPrueba)" />
+      <!-- HTML para subir el archivo PDF -->
+      <input type="file" (change)="onFileSelected($event)" />
+      <button (click)="uploadPdf(prueba.idPrueba)">Subir PDF</button>
     </td>
     <td>
       <!-- Mostrar los items asociados a la prueba -->

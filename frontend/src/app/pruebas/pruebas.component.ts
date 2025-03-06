@@ -1,7 +1,9 @@
+// filepath: /c:/xampp/htdocs/Skills/frontend/src/app/pruebas/pruebas.component.ts
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { PruebasService } from '../services/pruebas.service'; // Importa el servicio
 
 @Component({
   selector: 'app-pruebas',
@@ -17,8 +19,10 @@ export class PruebasComponent implements OnInit {
   error: string = '';
   isCreateModalOpen: boolean = false;
   isEditModalOpen: boolean = false;
+  selectedFile: File | null = null; // Variable para almacenar el archivo seleccionado
+  errorMessage: string = '';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private pruebasService: PruebasService) {} // Inyecta el servicio
 
   ngOnInit(): void {
     this.loadPruebas();
@@ -101,9 +105,6 @@ export class PruebasComponent implements OnInit {
   }
 
   // Método para asociar un item a una prueba
-  // Eliminar la variable global `selectedItemId`
-  // selectedItemId: number | null = null;  // Ya no es necesario
-
   addItemToPrueba(prueba: any): void {
     if (!prueba.selectedItemId) {
       alert('Selecciona un item antes de asociarlo.');
@@ -195,26 +196,42 @@ export class PruebasComponent implements OnInit {
     });
   }
 
-  // Método para subir un archivo PDF
-  uploadPdf(event: any, idPrueba: number): void {
-    const file = event.target.files[0];
-    if (!file) {
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append('file', file, file.name);
-
-    this.http
-      .post(`http://localhost:8080/pruebas/${idPrueba}/upload-pdf`, formData)
-      .subscribe({
+  // Método para subir un PDF
+  uploadPdf(pruebaId: number): void {
+    if (this.selectedFile) {
+      this.pruebasService.uploadPdf(pruebaId, this.selectedFile).subscribe({
         next: () => {
-          alert('Archivo PDF subido correctamente');
+          this.closeModal();
+          this.loadPruebas();
+          this.resetForm();
         },
         error: (err) => {
-          console.error(err);
-          this.error = 'Error al subir el archivo PDF.';
-        },
+          this.errorMessage = 'Error al subir el PDF: ' + (err.message || 'Error desconocido');
+        }
       });
+    } else {
+      this.errorMessage = 'Por favor, selecciona un archivo PDF para subir.';
+    }
+  }
+
+  // Método para ver un PDF
+  viewPdf(ruta: string): void {
+    this.pruebasService.viewPdf(ruta);
+  }
+
+  // Método para manejar la selección de archivos
+  onFileSelected(event: any): void {
+    this.selectedFile = event.target.files[0];
+  }
+
+  // Método para cerrar el modal
+  closeModal(): void {
+    // Implementa el cierre del modal
+  }
+
+  // Método para resetear el formulario
+  resetForm(): void {
+    this.selectedFile = null;
+    this.errorMessage = '';
   }
 }
