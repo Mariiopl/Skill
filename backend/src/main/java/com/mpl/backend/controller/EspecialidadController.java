@@ -27,29 +27,49 @@ public class EspecialidadController {
     @Autowired
     private EspecialidadService especialidadService;
 
-    // Obtener todas las especialidades
+    /**
+     * Endpoint para obtener todas las especialidades disponibles.
+     * 
+     * @return Lista de especialidades.
+     */
     @Operation(
         summary = "Obtener todas las especialidades",
-        description = "Retorna una lista de todas las especialidades disponibles."
+        description = "Retorna una lista de todas las especialidades disponibles.",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Lista de especialidades obtenida con éxito",
+                content = @Content(
+                    schema = @Schema(implementation = Especialidad.class),
+                    examples = @ExampleObject(value = "[{\"id\": 1, \"nombre\": \"Cardiología\", \"descripcion\": \"Especialidad en enfermedades del corazón\"}, {\"id\": 2, \"nombre\": \"Neurología\", \"descripcion\": \"Especialidad en enfermedades del sistema nervioso\"}]")
+                )
+            ),
+            @ApiResponse(responseCode = "404", description = "No se encontraron especialidades",
+                content = @Content(
+                    examples = @ExampleObject(value = "{\"message\": \"No se encontraron especialidades.\"}")
+                )
+            )
+        }
     )
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Lista de especialidades obtenida con éxito"),
-        @ApiResponse(responseCode = "404", description = "No se encontraron especialidades")
-    })
     @GetMapping
     public List<Especialidad> getAllEspecialidades() {
         return especialidadService.findAll();
     }
-
-    // Obtener una especialidad por ID
     @Operation(
         summary = "Obtener una especialidad por ID",
-        description = "Retorna una especialidad específica basada en su ID."
+        description = "Retorna una especialidad específica basada en su ID.",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Especialidad encontrada",
+                content = @Content(
+                    schema = @Schema(implementation = Especialidad.class),
+                    examples = @ExampleObject(value = "{\"id\": 1, \"nombre\": \"Cardiología\", \"descripcion\": \"Especialidad en enfermedades del corazón\"}")
+                )
+            ),
+            @ApiResponse(responseCode = "404", description = "Especialidad no encontrada",
+                content = @Content(
+                    examples = @ExampleObject(value = "{\"message\": \"Especialidad no encontrada.\"}")
+                )
+            )
+        }
     )
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Especialidad encontrada"),
-        @ApiResponse(responseCode = "404", description = "Especialidad no encontrada")
-    })
     @GetMapping("/{id}")
     public Especialidad getEspecialidadById(
         @Parameter(description = "ID de la especialidad", required = true, example = "1")
@@ -57,72 +77,71 @@ public class EspecialidadController {
     ) {
         return especialidadService.getById(id);
     }
-
-    // Guardar una nueva especialidad
     @Operation(
         summary = "Crear una nueva especialidad",
-        description = "Crea una nueva especialidad con los datos proporcionados."
-    )
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Especialidad creada con éxito"),
-        @ApiResponse(responseCode = "400", description = "Solicitud inválida")
-    })
-    @PostMapping("/crear")
-    public Especialidad createEspecialidad(
-        @io.swagger.v3.oas.annotations.parameters.RequestBody(
+        description = "Crea una nueva especialidad con los datos proporcionados.",
+        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
             description = "Datos de la especialidad a crear",
             required = true,
             content = @Content(
                 schema = @Schema(implementation = Especialidad.class),
                 examples = @ExampleObject(
-                    value = "{\"nombre\": \"Cardiología\", \"descripcion\": \"Especialidad en enfermedades del corazón\"}"
+                    value = "{\"nombre\": \"Ginecología\", \"descripcion\": \"Especialidad en salud femenina\"}"
                 )
             )
-        )
+        ),
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Especialidad creada con éxito",
+                content = @Content(
+                    schema = @Schema(implementation = Especialidad.class),
+                    examples = @ExampleObject(value = "{\"id\": 3, \"nombre\": \"Ginecología\", \"descripcion\": \"Especialidad en salud femenina\"}")
+                )
+            ),
+            @ApiResponse(responseCode = "400", description = "Solicitud inválida",
+                content = @Content(
+                    examples = @ExampleObject(value = "{\"message\": \"Datos de la especialidad son incorrectos o incompletos.\"}")
+                )
+            )
+        }
+    )
+    @PostMapping("/crear")
+    public Especialidad createEspecialidad(
         @RequestBody Especialidad especialidad
     ) {
         return especialidadService.save(especialidad);
     }
-
-    // Eliminar una especialidad por ID
-    @Operation(
-        summary = "Eliminar una especialidad por ID",
-        description = "Elimina una especialidad específica basada en su ID."
-    )
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Especialidad eliminada con éxito"),
-        @ApiResponse(responseCode = "404", description = "Especialidad no encontrada")
-    })
-    @DeleteMapping("/{id}")
-    public void deleteEspecialidad(
-        @Parameter(description = "ID de la especialidad a eliminar", required = true, example = "1")
-        @PathVariable Long id
-    ) {
-        especialidadService.deleteById(id);
-    }
-
-    // Actualizar una especialidad por ID
     @Operation(
         summary = "Actualizar una especialidad por ID",
-        description = "Actualiza los datos de una especialidad existente basada en su ID."
-    )
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Especialidad actualizada con éxito"),
-        @ApiResponse(responseCode = "400", description = "Solicitud inválida"),
-        @ApiResponse(responseCode = "404", description = "Especialidad no encontrada")
-    })
-    @PutMapping("/{id}")
-    public ResponseEntity<Especialidad> updateEspecialidad(
-        @io.swagger.v3.oas.annotations.parameters.RequestBody(
+        description = "Actualiza los datos de una especialidad existente basada en su ID.",
+        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
             description = "Datos actualizados de la especialidad",
             required = true,
             content = @Content(
                 schema = @Schema(implementation = EspecialidadDTO.class),
-                examples = @ExampleObject(
-                    value = "{\"nombre\": \"Cardiología\", \"descripcion\": \"Especialidad en enfermedades del corazón\"}"
+                examples = @ExampleObject(value = "{\"nombre\": \"Cardiología Avanzada\", \"descripcion\": \"Especialidad avanzada en enfermedades del corazón\"}")
+            )
+        ),
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Especialidad actualizada con éxito",
+                content = @Content(
+                    schema = @Schema(implementation = Especialidad.class),
+                    examples = @ExampleObject(value = "{\"id\": 1, \"nombre\": \"Cardiología Avanzada\", \"descripcion\": \"Especialidad avanzada en enfermedades del corazón\"}")
+                )
+            ),
+            @ApiResponse(responseCode = "404", description = "Especialidad no encontrada",
+                content = @Content(
+                    examples = @ExampleObject(value = "{\"message\": \"Especialidad no encontrada.\"}")
+                )
+            ),
+            @ApiResponse(responseCode = "400", description = "Solicitud inválida",
+                content = @Content(
+                    examples = @ExampleObject(value = "{\"message\": \"Datos inválidos para la actualización.\"}")
                 )
             )
-        )
+        }
+    )
+    @PutMapping("/{id}")
+    public ResponseEntity<Especialidad> updateEspecialidad(
         @RequestBody EspecialidadDTO especialidadDTO,
         @Parameter(description = "ID de la especialidad a actualizar", required = true, example = "1")
         @PathVariable Long id
@@ -130,4 +149,27 @@ public class EspecialidadController {
         Especialidad especialidad = especialidadService.updateEspecialidad(especialidadDTO, id);
         return new ResponseEntity<>(especialidad, HttpStatus.OK);
     }
-}
+    @Operation(
+        summary = "Eliminar una especialidad por ID",
+        description = "Elimina una especialidad específica basada en su ID.",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Especialidad eliminada con éxito",
+                content = @Content(
+                    examples = @ExampleObject(value = "{\"message\": \"Especialidad eliminada con éxito.\"}")
+                )
+            ),
+            @ApiResponse(responseCode = "404", description = "Especialidad no encontrada",
+                content = @Content(
+                    examples = @ExampleObject(value = "{\"message\": \"Especialidad no encontrada.\"}")
+                )
+            )
+        }
+    )
+    @DeleteMapping("/{id}")
+    public void deleteEspecialidad(
+        @Parameter(description = "ID de la especialidad a eliminar", required = true, example = "1")
+        @PathVariable Long id
+    ) {
+        especialidadService.deleteById(id);
+    }
+}                  
