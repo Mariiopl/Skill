@@ -3,7 +3,6 @@ import { EspecialidadService, Especialidad } from '../services/especialidad.serv
 import { FormsModule } from '@angular/forms'; // Importamos FormsModule para ngModel
 import { CommonModule } from '@angular/common'; // Importamos CommonModule para ngClass
 
-
 @Component({
   selector: 'app-especialidad',
   templateUrl: './especialidad.component.html',
@@ -16,6 +15,7 @@ export class EspecialidadComponent implements OnInit {
   isModalOpen: boolean = false; // Para controlar la apertura del modal
   isEditMode: boolean = false; // Para saber si estamos en modo edición o creación
   currentEspecialidad: Especialidad = { idEspecialidad: 0, nombre: '', codigo: '' }; // Especialidad actual en el modal
+  errorMessage: string = ''; // Para manejar el mensaje de error
 
   constructor(private especialidadService: EspecialidadService) {}
 
@@ -35,6 +35,7 @@ export class EspecialidadComponent implements OnInit {
     this.isModalOpen = true;
     this.isEditMode = false; // Modo crear
     this.currentEspecialidad = { idEspecialidad: 0, nombre: '', codigo: '' }; // Limpiar los campos
+    this.errorMessage = ''; // Limpiar cualquier error previo
   }
 
   // Abrir modal para editar especialidad
@@ -42,6 +43,7 @@ export class EspecialidadComponent implements OnInit {
     this.isModalOpen = true;
     this.isEditMode = true; // Modo editar
     this.currentEspecialidad = { ...especialidad }; // Cargar los datos de la especialidad en el modal
+    this.errorMessage = ''; // Limpiar cualquier error previo
   }
 
   // Cerrar el modal
@@ -51,28 +53,39 @@ export class EspecialidadComponent implements OnInit {
 
   // Guardar especialidad (crear o actualizar)
   saveEspecialidad(): void {
+    this.errorMessage = '';  // Resetear el mensaje de error antes de cada intento de guardado
+
     if (this.isEditMode) {
       // Si estamos en modo edición, actualizar la especialidad
-      this.especialidadService.updateEspecialidad(this.currentEspecialidad).subscribe(data => {
-        const index = this.especialidades.findIndex(e => e.idEspecialidad === data.idEspecialidad);
-        if (index !== -1) {
-          this.especialidades[index] = data; // Actualizar la especialidad en la tabla
+      this.especialidadService.updateEspecialidad(this.currentEspecialidad).subscribe({
+        next: (data) => {
+          const index = this.especialidades.findIndex(e => e.idEspecialidad === data.idEspecialidad);
+          if (index !== -1) {
+            this.especialidades[index] = data; // Actualizar la especialidad en la tabla
+          }
+          this.closeModal(); // Cerrar el modal después de la actualización
+        },
+        error: (error) => {
+          this.errorMessage = error.message; // Mostrar mensaje de error
         }
-        this.closeModal(); // Cerrar el modal después de la actualización
       });
     } else {
-    // Modo creación: crea un objeto nuevo sin idEspecialidad
-    const especialidadNueva = {
-      nombre: this.currentEspecialidad.nombre,
-      codigo: this.currentEspecialidad.codigo
-    };
-    this.especialidadService.addEspecialidad(especialidadNueva as Especialidad).subscribe(data => {
-      this.especialidades.push(data);
-      this.closeModal();
-    });
+      // Modo creación: crea un objeto nuevo sin idEspecialidad
+      const especialidadNueva = {
+        nombre: this.currentEspecialidad.nombre,
+        codigo: this.currentEspecialidad.codigo
+      };
+      this.especialidadService.addEspecialidad(especialidadNueva as Especialidad).subscribe({
+        next: (data) => {
+          this.especialidades.push(data);
+          this.closeModal();
+        },
+        error: (error) => {
+          this.errorMessage = error.message; // Mostrar mensaje de error
+        }
+      });
     }
   }
-  
 
   // Eliminar especialidad
   deleteEspecialidad(idEspecialidad: number): void {

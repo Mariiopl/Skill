@@ -16,8 +16,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 /**
  * Controlador para la gestión de especialidades.
@@ -52,39 +52,39 @@ public class EspecialidadController {
         return especialidadService.findAll();
     }
 
-/**
- * Obtiene una especialidad específica basada en su ID.
- * @param id ID de la especialidad a buscar.
- * @return Especialidad encontrada.
- */
-@Operation(
-    summary = "Obtener una especialidad por ID",
-    description = "Retorna una especialidad específica basada en su ID.",
-    responses = {
-        @ApiResponse(responseCode = "200", description = "Especialidad encontrada",
-            content = @Content(
-                schema = @Schema(implementation = Especialidad.class),
-                examples = @ExampleObject(value = "{\"id\": 1, \"nombre\": \"Cardiología\", \"descripcion\": \"Especialidad en enfermedades del corazón\"}")
-            )
-        ),
-        @ApiResponse(responseCode = "404", description = "Especialidad no encontrada")
+    /**
+     * Obtiene una especialidad específica basada en su ID.
+     * @param id ID de la especialidad a buscar.
+     * @return Especialidad encontrada.
+     */
+    @Operation(
+        summary = "Obtener una especialidad por ID",
+        description = "Retorna una especialidad específica basada en su ID.",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Especialidad encontrada",
+                content = @Content(
+                    schema = @Schema(implementation = Especialidad.class),
+                    examples = @ExampleObject(value = "{\"id\": 1, \"nombre\": \"Cardiología\", \"descripcion\": \"Especialidad en enfermedades del corazón\"}")
+                )
+            ),
+            @ApiResponse(responseCode = "404", description = "Especialidad no encontrada")
+        }
+    )
+    @GetMapping("/{id}")
+    public ResponseEntity<Especialidad> getEspecialidadById(
+        @Parameter(description = "ID de la especialidad", required = true, example = "1")
+        @PathVariable Long id
+    ) {
+        Especialidad especialidad = especialidadService.getById(id);
+        
+        // Verifica si la especialidad fue encontrada
+        if (especialidad == null) {
+            // Devuelve un error 404 si no se encuentra la especialidad
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        
+        return new ResponseEntity<>(especialidad, HttpStatus.OK);
     }
-)
-@GetMapping("/{id}")
-public ResponseEntity<Especialidad> getEspecialidadById(
-    @Parameter(description = "ID de la especialidad", required = true, example = "1")
-    @PathVariable Long id
-) {
-    Especialidad especialidad = especialidadService.getById(id);
-    
-    // Verifica si la especialidad fue encontrada
-    if (especialidad == null) {
-        // Devuelve un error 404 si no se encuentra la especialidad
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-    
-    return new ResponseEntity<>(especialidad, HttpStatus.OK);
-}
 
     /**
      * Crea una nueva especialidad con los datos proporcionados.
@@ -107,8 +107,8 @@ public ResponseEntity<Especialidad> getEspecialidadById(
         }
     )
     @PostMapping("/crear")
-    public Especialidad createEspecialidad(@RequestBody Especialidad especialidad) {
-        return especialidadService.save(especialidad);
+    public ResponseEntity<Especialidad> createEspecialidad(@Valid @RequestBody Especialidad especialidad) {
+        return new ResponseEntity<>(especialidadService.save(especialidad), HttpStatus.CREATED);
     }
 
     /**
@@ -134,7 +134,7 @@ public ResponseEntity<Especialidad> getEspecialidadById(
     )
     @PutMapping("/{id}")
     public ResponseEntity<Especialidad> updateEspecialidad(
-        @RequestBody EspecialidadDTO especialidadDTO,
+        @Valid @RequestBody EspecialidadDTO especialidadDTO,
         @Parameter(description = "ID de la especialidad a actualizar", required = true, example = "1")
         @PathVariable Long id
     ) {

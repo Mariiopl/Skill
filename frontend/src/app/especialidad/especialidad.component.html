@@ -15,6 +15,11 @@
       <label for="codigo">Código</label>
       <input type="text" id="codigo" [(ngModel)]="currentEspecialidad.codigo" name="codigo" required />
 
+      <!-- Mostrar error si existe -->
+      <div *ngIf="errorMessage" style="color: red;">
+        <strong>Error:</strong> {{ errorMessage }}
+      </div>
+
       <button type="submit">{{ isEditMode ? 'Actualizar' : 'Crear' }} Especialidad</button>
     </form>
   </div>

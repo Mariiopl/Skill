@@ -11,6 +11,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 @Getter
@@ -22,11 +25,18 @@ public class Prueba {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idPrueba;
 
+    @NotNull(message = "El enunciado no puede ser nulo")
+    @Size(min = 5, max = 500, message = "El enunciado debe tener entre 5 y 500 caracteres")
     private String enunciado;
+
+    @NotNull(message = "La puntuación máxima no puede ser nula")
+    @Positive(message = "La puntuación máxima debe ser un valor positivo")
     private Integer puntuacionMaxima;
+
     private String ruta; // Campo para almacenar la ruta del PDF
 
     @ManyToOne
+    @NotNull(message = "La especialidad no puede ser nula")
     private Especialidad especialidad;
 
     @OneToMany(mappedBy = "prueba", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

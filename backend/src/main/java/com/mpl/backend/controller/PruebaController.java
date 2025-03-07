@@ -16,10 +16,9 @@ import com.mpl.backend.repository.ItemRepository;
 import com.mpl.backend.repository.PruebaRepository;
 import com.mpl.backend.service.PruebaService;
 
+import jakarta.validation.Valid;
+
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/pruebas")
@@ -47,7 +46,7 @@ public class PruebaController {
 
     // Guardar un nuevo prueba
     @PostMapping("/crear")
-    public ResponseEntity<Prueba> createPrueba(@RequestBody PruebaDTO pruebaDTO) {
+    public ResponseEntity<Prueba> createPrueba(@Valid @RequestBody PruebaDTO pruebaDTO) {
         Prueba prueba = pruebaService.crearPrueba(pruebaDTO);
         return new ResponseEntity<>(prueba, HttpStatus.CREATED);
     }
@@ -61,7 +60,7 @@ public class PruebaController {
 
     // Actualizar un prueba por ID
     @PutMapping("/{id}")
-    public ResponseEntity<Prueba> updatePrueba(@RequestBody PruebaDTO pruebaDTO, @PathVariable Long id) {
+    public ResponseEntity<Prueba> updatePrueba(@Valid @RequestBody PruebaDTO pruebaDTO, @PathVariable Long id) {
         Prueba prueba = pruebaService.updatePrueba(pruebaDTO, id);
         return new ResponseEntity<>(prueba, HttpStatus.OK);
     }
@@ -87,7 +86,7 @@ public class PruebaController {
     
 
     @PostMapping("/{id}/pdf")
-    public ResponseEntity<Void> uploadPdf(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<Void> uploadPdf(@PathVariable Long id, @Valid @RequestParam("file") MultipartFile file) {
         try {
             pruebaService.savePdf(id, file);
             return ResponseEntity.ok().build();
@@ -96,7 +95,7 @@ public class PruebaController {
         }
     }
     @PostMapping("/{idPrueba}/agregar-items")
-    public ResponseEntity<String> addItemsToPrueba(@PathVariable Long idPrueba, @RequestBody List<Item> items) {
+    public ResponseEntity<String> addItemsToPrueba(@PathVariable Long idPrueba, @Valid @RequestBody List<Item> items) {
         try {
             pruebaService.addItemsToPrueba(idPrueba, items);
             return ResponseEntity.ok("Ítems asociados correctamente");

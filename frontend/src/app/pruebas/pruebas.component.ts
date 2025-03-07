@@ -22,7 +22,10 @@ export class PruebasComponent implements OnInit {
   selectedFile: File | null = null; // Variable para almacenar el archivo seleccionado
   errorMessage: string = '';
 
-  constructor(private http: HttpClient, private pruebasService: PruebasService) {} // Inyecta el servicio
+  constructor(
+    private http: HttpClient,
+    private pruebasService: PruebasService
+  ) {} // Inyecta el servicio
 
   ngOnInit(): void {
     this.loadPruebas();
@@ -99,7 +102,11 @@ export class PruebasComponent implements OnInit {
         },
         error: (err) => {
           console.error(err);
-          this.error = 'Error al crear la prueba.';
+          if (err.status === 400) {
+            this.error = `Error de validación: ${JSON.stringify(err.error)}`;
+          } else {
+            this.error = 'Error al crear la prueba.';
+          }
         },
       });
   }
@@ -178,7 +185,11 @@ export class PruebasComponent implements OnInit {
         },
         error: (err) => {
           console.error(err);
-          this.error = 'Error al actualizar la prueba.';
+          if (err.status === 400) {
+            this.error = `Error de validación: ${JSON.stringify(err.error)}`;
+          } else {
+            this.error = 'Error al actualizar la prueba.';
+          }
         },
       });
   }
@@ -206,8 +217,9 @@ export class PruebasComponent implements OnInit {
           this.resetForm();
         },
         error: (err) => {
-          this.errorMessage = 'Error al subir el PDF: ' + (err.message || 'Error desconocido');
-        }
+          this.errorMessage =
+            'Error al subir el PDF: ' + (err.message || 'Error desconocido');
+        },
       });
     } else {
       this.errorMessage = 'Por favor, selecciona un archivo PDF para subir.';

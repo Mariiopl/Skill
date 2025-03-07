@@ -3,6 +3,9 @@ package com.mpl.backend.controller;
 import com.mpl.backend.dto.UserUpdateDTO;
 import com.mpl.backend.model.User;
 import com.mpl.backend.service.UserService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,13 +26,13 @@ public class UserController {
     }
 
     @PostMapping
-    public User createUser(@RequestBody User newUser) {
+    public User createUser(@Valid @RequestBody User newUser) {
         newUser.setRole("experto");
         return userService.saveUser(newUser);  // Crea un nuevo usuario
     }
 
     @PutMapping("/{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody UserUpdateDTO userDTO) {
+    public User updateUser(@PathVariable Long id, @Valid @RequestBody UserUpdateDTO userDTO) {
         return userService.updateUser(id, userDTO);
     }
     

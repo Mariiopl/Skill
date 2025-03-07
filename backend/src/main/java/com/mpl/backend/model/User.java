@@ -8,6 +8,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Email;
 import java.util.Collection;
 import java.util.List;
 
@@ -18,11 +22,25 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull(message = "El rol no puede ser nulo")
     private String role;
+
+    @NotNull(message = "El nombre de usuario no puede ser nulo")
+    @Size(min = 5, max = 20, message = "El nombre de usuario debe tener entre 5 y 20 caracteres")
     private String username;
+
+    @NotNull(message = "La contraseña no puede ser nula")
+    @Size(min = 6, max = 50, message = "La contraseña debe tener entre 6 y 50 caracteres")
     private String password;
+
+    @NotNull(message = "El nombre no puede ser nulo")
     private String nombre;
+
+    @NotNull(message = "Los apellidos no pueden ser nulos")
     private String apellidos;
+
+    @NotNull(message = "El DNI no puede ser nulo")
+    @Pattern(regexp = "^[0-9]{8}[A-Za-z]{1}$", message = "El DNI debe tener el formato correcto (8 dígitos seguidos de una letra)")
     private String dni;
 
     @ManyToOne
@@ -40,7 +58,7 @@ public class User implements UserDetails {
         this.role = "experto"; // rol por defecto
     }
 
-    // Getters and setters
+    // Getters and setters (no cambia mucho de los anteriores)
     public Long getId() {
         return id;
     }
@@ -60,7 +78,6 @@ public class User implements UserDetails {
     public void setUsername(String username) {
         this.username = username;
     }
-
 
     public void setPassword(String password) {
         this.password = password;
@@ -101,7 +118,6 @@ public class User implements UserDetails {
     // Implementación de métodos de UserDetails
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Convertimos el rol en un listado de authorities
         return List.of(() -> "ROLE_" + this.role); // Añadimos "ROLE_" para que coincida con el formato de Spring Security
     }
 
@@ -117,21 +133,21 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return true; // Puedes implementar lógica de expiración si lo deseas
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true; // Implementar según necesidades de seguridad
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true; // Implementar según necesidades de seguridad
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return true; // Implementar según necesidades de seguridad
+        return true;
     }
 }

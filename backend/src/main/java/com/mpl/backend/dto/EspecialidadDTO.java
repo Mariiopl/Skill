@@ -5,6 +5,9 @@ package com.mpl.backend.dto;
 //     "codigo": "N01"
 // }
 
-public record EspecialidadDTO(String nombre, String codigo) {
 
+public record EspecialidadDTO(
+    @jakarta.validation.constraints.NotBlank(message = "El nombre es obligatorio") String nombre,
+    @jakarta.validation.constraints.NotBlank(message = "El código es obligatorio") String codigo
+) {
 }

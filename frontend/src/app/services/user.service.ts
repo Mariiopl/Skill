@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
 
 
 @Injectable({
@@ -33,5 +33,14 @@ export class UserRegistradoService {
   getUserData(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/me`, { headers: this.getHeaders() });
   }
-  
+  private handleError(error: HttpErrorResponse) {
+    let errorMessage = 'Algo salió mal. Intenta de nuevo más tarde.';
+    
+    if (error.status === 400) {
+      // Mostrar mensajes de validación si existen
+      errorMessage = `Error de validación: ${JSON.stringify(error.error)}`;
+    }
+    
+    return throwError(() => new Error(errorMessage));
+  }
 }
