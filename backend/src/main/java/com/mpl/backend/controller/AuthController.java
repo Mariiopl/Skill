@@ -40,6 +40,10 @@ public class AuthController {
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
+    /**
+     * Endpoint para registrar un nuevo usuario en el sistema.
+     * Recibe los datos del usuario y devuelve la información del usuario registrado.
+     */
     @Operation(
         summary = "Registrar un nuevo usuario",
         description = "Registra un nuevo usuario en el sistema y devuelve los datos del usuario creado.",
@@ -88,6 +92,10 @@ public class AuthController {
         return this.userService.save(userDTO);
     }
 
+    /**
+     * Endpoint para autenticar un usuario y obtener un token JWT.
+     * Devuelve un token válido para realizar operaciones autenticadas.
+     */
     @Operation(
         summary = "Iniciar sesión",
         description = "Permite a un usuario autenticarse y obtener un token JWT.",
@@ -124,6 +132,10 @@ public class AuthController {
         return new LoginResponse(user.getUsername(), user.getRole(), token, user.getEspecialidad().getIdEspecialidad());
     }
 
+    /**
+     * Endpoint para cerrar sesión.
+     * No invalida el token en el backend, solo proporciona un mensaje de confirmación.
+     */
     @Operation(
         summary = "Cerrar sesión",
         description = "Finaliza la sesión del usuario (solo respuesta de confirmación, el backend no almacena sesiones).",
