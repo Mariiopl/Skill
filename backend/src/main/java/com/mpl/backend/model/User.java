@@ -11,7 +11,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Email;
 import java.util.Collection;
 import java.util.List;
 
@@ -22,7 +21,7 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "El rol no puede ser nulo")
+
     private String role;
 
     @NotNull(message = "El nombre de usuario no puede ser nulo")
@@ -30,13 +29,17 @@ public class User implements UserDetails {
     private String username;
 
     @NotNull(message = "La contraseña no puede ser nula")
-    @Size(min = 6, max = 50, message = "La contraseña debe tener entre 6 y 50 caracteres")
+    @Size(min = 6, max = 1550, message = "La contraseña debe tener entre 6 y 50 caracteres")
     private String password;
 
     @NotNull(message = "El nombre no puede ser nulo")
+    @Size(min = 3, max = 50, message = "El nombre no puede tener menos de 3 caracteres ni más de 50")
+    @Pattern(regexp = "^[a-zA-Z]+$", message = "El nombre solo puede contener letras")
     private String nombre;
 
     @NotNull(message = "Los apellidos no pueden ser nulos")
+    @Size(min = 3, max = 50, message = "Los apellidos no pueden tener menos de 3 caracteres ni más de 50")
+    @Pattern(regexp = "^[a-zA-Z]+$", message = "Los apellidos solo pueden contener letras")
     private String apellidos;
 
     @NotNull(message = "El DNI no puede ser nulo")

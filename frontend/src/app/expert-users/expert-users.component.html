@@ -24,6 +24,7 @@
     </tr>
   </tbody>
 </table>
+
 <!-- Modal para crear nuevo experto -->
 <div class="modal" tabindex="-1" [ngClass]="{'show': isCreateModalOpen}" [ngStyle]="{'display': isCreateModalOpen ? 'block' : 'none'}">
   <div class="modal-dialog">
@@ -33,47 +34,54 @@
         <button type="button" class="btn-close" aria-label="Close" (click)="closeCreateModal()"></button>
       </div>
       <div class="modal-body">
-        <form (ngSubmit)="createExpert()">
+        <form (ngSubmit)="createExpert()" #expertForm="ngForm">
           <div class="mb-3">
             <label for="username" class="form-label">Username</label>
-            <input type="text" id="username" [(ngModel)]="newExpert.username" name="username" class="form-control" required>
+            <input type="text" id="username" [(ngModel)]="newExpert.username" name="username" class="form-control" required minlength="5" maxlength="20" #username="ngModel">
+            <div *ngIf="username.invalid && username.touched" class="text-danger">El nombre de usuario debe tener entre 5 y 20 caracteres.</div>
           </div>
           <div class="mb-3">
             <label for="nombre" class="form-label">Nombre</label>
-            <input type="text" id="nombre" [(ngModel)]="newExpert.nombre" name="nombre" class="form-control" required>
+            <input type="text" id="nombre" [(ngModel)]="newExpert.nombre" name="nombre" class="form-control" required minlength="3" maxlength="50" pattern="^[a-zA-Z]+$" #nombre="ngModel">
+            <div *ngIf="nombre.invalid && nombre.touched" class="text-danger">El nombre solo puede contener letras y debe tener entre 3 y 50 caracteres.</div>
           </div>
           <div class="mb-3">
             <label for="apellidos" class="form-label">Apellidos</label>
-            <input type="text" id="apellidos" [(ngModel)]="newExpert.apellidos" name="apellidos" class="form-control" required>
+            <input type="text" id="apellidos" [(ngModel)]="newExpert.apellidos" name="apellidos" class="form-control" required minlength="3" maxlength="50" pattern="^[a-zA-Z]+$" #apellidos="ngModel">
+            <div *ngIf="apellidos.invalid && apellidos.touched" class="text-danger">Los apellidos solo pueden contener letras y deben tener entre 3 y 50 caracteres.</div>
           </div>
           <div class="mb-3">
             <label for="dni" class="form-label">DNI</label>
-            <input type="text" id="dni" [(ngModel)]="newExpert.dni" name="dni" class="form-control" required>
+            <input type="text" id="dni" [(ngModel)]="newExpert.dni" name="dni" class="form-control" required pattern="^[0-9]{8}[A-Za-z]{1}$" #dni="ngModel">
+            <div *ngIf="dni.invalid && dni.touched" class="text-danger">El DNI debe tener el formato correcto (8 dígitos seguidos de una letra).</div>
           </div>
           <div class="mb-3">
             <label for="password" class="form-label">Contraseña</label>
-            <input type="password" id="password" [(ngModel)]="newExpert.password" name="password" class="form-control" required>
+            <input type="password" id="password" [(ngModel)]="newExpert.password" name="password" class="form-control" required minlength="6" maxlength="50" #password="ngModel">
+            <div *ngIf="password.invalid && password.touched" class="text-danger">La contraseña debe tener entre 6 y 50 caracteres.</div>
           </div>
           <div class="mb-3">
             <label for="password2" class="form-label">Repetir Contraseña</label>
-            <input type="password" id="password2" [(ngModel)]="newExpert.password2" name="password2" class="form-control" required>
+            <input type="password" id="password2" [(ngModel)]="newExpert.password2" name="password2" class="form-control" required minlength="6" maxlength="50" #password2="ngModel">
+            <div *ngIf="password2.invalid && password2.touched" class="text-danger">La contraseña debe tener entre 6 y 50 caracteres.</div>
+            <div *ngIf="newExpert.password !== newExpert.password2" class="text-danger">Las contraseñas no coinciden.</div>
           </div>
           <div class="mb-3">
             <label for="especialidad">Especialidad:</label>
-            <select id="especialidad" [(ngModel)]="newExpert.idEspecialidad" name="idEspecialidad" class="form-select" required (ngModelChange)="convertIdEspecialidad($event)">
+            <select id="especialidad" [(ngModel)]="newExpert.idEspecialidad" name="idEspecialidad" class="form-select" required (ngModelChange)="convertIdEspecialidad($event)" #especialidad="ngModel">
               <option value="" disabled selected>Selecciona una especialidad</option>
               <option *ngFor="let especialidad of especialidades" [value]="especialidad.idEspecialidad">
                 {{ especialidad.nombre }}
               </option>
             </select>
+            <div *ngIf="especialidad.invalid && especialidad.touched" class="text-danger">Debe seleccionar una especialidad.</div>
           </div>
-          <button type="submit" class="btn btn-primary">Crear Experto</button>
+          <button type="submit" class="btn btn-primary" [disabled]="expertForm.invalid">Crear Experto</button>
         </form>
       </div>
     </div>
   </div>
 </div>
-
 
 <!-- Modal para editar experto -->
 <div class="modal" tabindex="-1" [ngClass]="{'show': isEditModalOpen}" [ngStyle]="{'display': isEditModalOpen ? 'block' : 'none'}">
@@ -84,34 +92,40 @@
         <button type="button" class="btn-close" aria-label="Close" (click)="closeEditModal()"></button>
       </div>
       <div class="modal-body">
-        <form (ngSubmit)="updateExpert()">
+        <form (ngSubmit)="updateExpert()" #expertForm="ngForm">
           <div class="mb-3">
             <label for="editUsername" class="form-label">Username</label>
-            <input type="text" id="editUsername" [(ngModel)]="selectedExpert.username" name="username" class="form-control" required>
+            <input type="text" id="editUsername" [(ngModel)]="selectedExpert.username" name="username" class="form-control" required minlength="5" maxlength="20" #username="ngModel">
+            <div *ngIf="username.invalid && username.touched" class="text-danger">El nombre de usuario debe tener entre 5 y 20 caracteres.</div>
           </div>
           <div class="mb-3">
             <label for="editNombre" class="form-label">Nombre</label>
-            <input type="text" id="editNombre" [(ngModel)]="selectedExpert.nombre" name="nombre" class="form-control" required>
+            <input type="text" id="editNombre" [(ngModel)]="selectedExpert.nombre" name="nombre" class="form-control" required minlength="3" maxlength="50" pattern="^[a-zA-Z]+$" #nombre="ngModel">
+            <div *ngIf="nombre.invalid && nombre.touched" class="text-danger">El nombre solo puede contener letras y debe tener entre 3 y 50 caracteres.</div>
           </div>
           <div class="mb-3">
             <label for="editApellidos" class="form-label">Apellidos</label>
-            <input type="text" id="editApellidos" [(ngModel)]="selectedExpert.apellidos" name="apellidos" class="form-control" required>
+            <input type="text" id="editApellidos" [(ngModel)]="selectedExpert.apellidos" name="apellidos" class="form-control" required minlength="3" maxlength="50" pattern="^[a-zA-Z]+$" #apellidos="ngModel">
+            <div *ngIf="apellidos.invalid && apellidos.touched" class="text-danger">Los apellidos solo pueden contener letras y deben tener entre 3 y 50 caracteres.</div>
           </div>
           <div class="mb-3">
             <label for="editDNI" class="form-label">DNI</label>
-            <input type="text" id="editDNI" [(ngModel)]="selectedExpert.dni" name="dni" class="form-control" required>
+            <input type="text" id="editDNI" [(ngModel)]="selectedExpert.dni" name="dni" class="form-control" required pattern="^[0-9]{8}[A-Za-z]{1}$" #dni="ngModel">
+            <div *ngIf="dni.invalid && dni.touched" class="text-danger">El DNI debe tener el formato correcto (8 dígitos seguidos de una letra).</div>
           </div>
           <div class="mb-3">
             <label for="editEspecialidad" class="form-label">Especialidad</label>
-            <select id="editEspecialidad" [(ngModel)]="selectedExpert.especialidadId" name="especialidadId" class="form-select" required>
+            <select id="editEspecialidad" [(ngModel)]="selectedExpert.especialidadId" name="especialidadId" class="form-select" required #especialidad="ngModel">
               <option *ngFor="let especialidad of especialidades" [value]="especialidad.idEspecialidad">
                 {{ especialidad.nombre }}
               </option>
             </select>
+            <div *ngIf="especialidad.invalid && especialidad.touched" class="text-danger">Debe seleccionar una especialidad.</div>
           </div>
-          <button type="submit" class="btn btn-success">Guardar Cambios</button>
+          <button type="submit" class="btn btn-success" [disabled]="expertForm.invalid">Guardar Cambios</button>
         </form>
       </div>
     </div>
   </div>
 </div>
+

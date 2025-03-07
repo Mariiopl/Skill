@@ -28,6 +28,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 @RestController
 @Tag(name = "Autenticación", description = "Endpoints para registrar usuarios, iniciar sesión y cerrar sesión")
@@ -88,7 +89,7 @@ public class AuthController {
         @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
     @PostMapping("/auth/register")
-    public User save(@RequestBody UserRegisterDTO userDTO) {
+    public User save(@Valid @RequestBody UserRegisterDTO userDTO) {
         return this.userService.save(userDTO);
     }
 

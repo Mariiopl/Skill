@@ -117,16 +117,19 @@ createExpert(): void {
   updateExpert(): void {
     const expertToUpdate = {
       ...this.selectedExpert,
-      especialidadId: this.selectedExpert.especialidadId
+      especialidadId: this.selectedExpert.especialidadId  // Asigna el id de especialidad
     };
-
-    delete expertToUpdate.especialidad; // Eliminamos la clave incorrecta para evitar conflictos
-
+  
+    delete expertToUpdate.especialidad; // Elimina la clave incorrecta (especialidad)
+  
     this.http.put<any>(`http://localhost:8080/users/${this.selectedExpert.id}`, expertToUpdate).subscribe({
       next: (updatedExpert) => {
+        // Actualiza el experto en la lista
         const index = this.experts.findIndex(u => u.id === updatedExpert.id);
-        if (index !== -1) this.experts[index] = updatedExpert;
-        this.closeEditModal();
+        if (index !== -1) {
+          this.experts[index] = updatedExpert; // Reemplaza el experto actualizado en la lista
+        }
+        this.closeEditModal(); // Cierra el modal
       },
       error: (err) => {
         console.error(err);
@@ -134,4 +137,5 @@ createExpert(): void {
       }
     });
   }
+  
 }

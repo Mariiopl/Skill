@@ -18,6 +18,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/participantes")
@@ -79,7 +80,7 @@ public class ParticipanteController {
                 )
             )
         )
-        @RequestBody ParticipanteDTO participanteDTO
+        @Valid @RequestBody ParticipanteDTO participanteDTO
     ) {
         Participante participante = participanteService.crearParticipante(participanteDTO);
         return new ResponseEntity<>(participante, HttpStatus.CREATED);
@@ -124,7 +125,7 @@ public class ParticipanteController {
                 )
             )
         )
-        @RequestBody ParticipanteDTO participanteDTO,
+        @Valid@RequestBody ParticipanteDTO participanteDTO,
         @Parameter(description = "ID del participante a actualizar", required = true, example = "1")
         @PathVariable Long id
     ) {

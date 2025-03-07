@@ -7,6 +7,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,10 +22,21 @@ public class Participante {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idParticipante;
 
+    // Validación: nombre no puede estar vacío
+    @NotBlank(message = "El nombre es obligatorio")
     private String nombre;
+
+    // Validación: apellidos no pueden estar vacíos
+    @NotBlank(message = "Los apellidos son obligatorios")
     private String apellidos;
+
+    // Validación: centro no puede estar vacío ni tener más de 100 caracteres
+    @NotBlank(message = "El centro es obligatorio")
+    @Size(max = 100, message = "El nombre del centro no puede tener más de 100 caracteres")
     private String centro;
 
+    // Relación con Especialidad, no puede ser nula
+    @NotNull(message = "La especialidad es obligatoria")
     @ManyToOne
     @JoinColumn(name = "especialidad_id")
     private Especialidad especialidad;
